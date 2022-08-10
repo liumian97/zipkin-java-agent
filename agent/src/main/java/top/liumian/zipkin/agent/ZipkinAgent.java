@@ -29,7 +29,8 @@ public class ZipkinAgent {
             }
         };
         // 指定拦截org.pearl.order下
-        new AgentBuilder.Default().type(ElementMatchers.<TypeDescription>nameStartsWith("top.liumian.zipkin.agent.test"))
+        new AgentBuilder.Default()
+                .type(ElementMatchers.<TypeDescription>nameStartsWith("top.liumian.zipkin.agent.test"))
                 .transform(transformer).installOn(instrumentation);
     }
 
