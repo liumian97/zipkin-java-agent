@@ -23,7 +23,7 @@ public class ConsumerTracingInterceptor extends AbstractTracingInterceptor {
             logger.log(Level.WARNING, "msgs size > 1, stop tracing");
             return null;
         } else {
-            String traceName = "MQ/SEND";
+            String traceName = "MQ/CONSUMER";
             return TracingUtil.extractTraceInfo(tracing, traceName, () -> {
                 MessageExt messageExt = msgs.get(0);
                 return messageExt.getProperties();

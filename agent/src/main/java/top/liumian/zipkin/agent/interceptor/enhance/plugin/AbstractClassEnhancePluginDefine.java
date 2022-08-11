@@ -21,4 +21,7 @@ public abstract class AbstractClassEnhancePluginDefine {
     public abstract String getEnhanceClass();
 
 
+
+
+
 }
