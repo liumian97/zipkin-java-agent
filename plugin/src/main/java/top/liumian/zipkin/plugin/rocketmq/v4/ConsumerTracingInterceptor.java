@@ -4,7 +4,7 @@ import brave.Span;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.common.message.MessageExt;
-import top.liumian.zipkin.agent.plugin.AbstractTracingPlugin;
+import top.liumian.zipkin.agent.plugin.interceptor.enhance.AbstractTracingInterceptor;
 import top.liumian.zipkin.core.tracing.TracingUtil;
 
 import java.lang.reflect.Method;
@@ -14,7 +14,7 @@ import java.util.logging.Level;
 /**
  * @author liumian  2022/8/10 21:27
  */
-public class ConsumerTracingPlugin extends AbstractTracingPlugin {
+public class ConsumerTracingInterceptor extends AbstractTracingInterceptor {
 
     @Override
     public Span beforeMethod(Method method, Object[] allArguments, Class<?>[] argumentsTypes) throws Throwable {

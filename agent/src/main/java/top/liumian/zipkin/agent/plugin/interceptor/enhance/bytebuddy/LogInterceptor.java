@@ -1,4 +1,4 @@
-package top.liumian.zipkin.agent.interceptor;
+package top.liumian.zipkin.agent.plugin.interceptor.enhance.bytebuddy;
 
 import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;

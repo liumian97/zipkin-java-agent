@@ -1,4 +1,4 @@
-package top.liumian.zipkin.agent.plugin;
+package top.liumian.zipkin.agent.plugin.interceptor.enhance;
 
 import brave.Span;
 
@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 /**
  * @author liumian  2022/8/10 20:33
  */
-public interface TracingPlugin {
+public interface TracingInterceptor {
 
 
     /**

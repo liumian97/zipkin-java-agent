@@ -1,10 +1,10 @@
-package top.liumian.zipkin.agent.interceptor;
+package top.liumian.zipkin.agent.plugin.interceptor.enhance.bytebuddy;
 
 import brave.Span;
 import brave.Tracer;
 import brave.Tracing;
 import net.bytebuddy.implementation.bind.annotation.*;
-import top.liumian.zipkin.agent.plugin.TracingPlugin;
+import top.liumian.zipkin.agent.plugin.interceptor.enhance.TracingInterceptor;
 import top.liumian.zipkin.core.tracing.TracingUtil;
 
 import java.lang.reflect.Method;
@@ -21,12 +21,12 @@ public class MethodTracingInterceptor {
 
     private final static Logger logger = Logger.getLogger(MethodTracingInterceptor.class.getName());
 
-    private final TracingPlugin tracingPlugin;
+    private final TracingInterceptor tracingInterceptor;
 
     protected final Tracing tracing;
 
-    public MethodTracingInterceptor(TracingPlugin tracingPlugin) {
-        this.tracingPlugin = tracingPlugin;
+    public MethodTracingInterceptor(TracingInterceptor tracingInterceptor) {
+        this.tracingInterceptor = tracingInterceptor;
         tracing = TracingUtil.getTracing();
     }
 
@@ -36,7 +36,7 @@ public class MethodTracingInterceptor {
 
         Span span = null;
         try {
-            span = tracingPlugin.beforeMethod(method, allArguments, method.getParameterTypes());
+            span = tracingInterceptor.beforeMethod(method, allArguments, method.getParameterTypes());
         } catch (Throwable throwable) {
             logger.log(Level.SEVERE, "tracing before method error", throwable);
         }
@@ -47,12 +47,12 @@ public class MethodTracingInterceptor {
             return result;
         } catch (Throwable throwable) {
             if (span != null) {
-                tracingPlugin.handleMethodException(method, allArguments, method.getParameterTypes(), span, throwable);
+                tracingInterceptor.handleMethodException(method, allArguments, method.getParameterTypes(), span, throwable);
             }
             throw throwable;
         } finally {
             if (span != null) {
-                tracingPlugin.afterMethod(method, allArguments, method.getParameterTypes(), span, result);
+                tracingInterceptor.afterMethod(method, allArguments, method.getParameterTypes(), span, result);
                 span.finish();
             }
         }

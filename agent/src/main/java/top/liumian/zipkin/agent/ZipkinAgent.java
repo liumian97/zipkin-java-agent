@@ -7,7 +7,7 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
-import top.liumian.zipkin.agent.interceptor.LogInterceptor;
+import top.liumian.zipkin.agent.plugin.interceptor.enhance.bytebuddy.LogInterceptor;
 
 import java.lang.instrument.Instrumentation;
 

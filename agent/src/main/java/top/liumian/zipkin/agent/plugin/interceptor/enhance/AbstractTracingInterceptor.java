@@ -1,4 +1,4 @@
-package top.liumian.zipkin.agent.plugin;
+package top.liumian.zipkin.agent.plugin.interceptor.enhance;
 
 import brave.Span;
 import brave.Tracing;
@@ -10,9 +10,9 @@ import java.util.logging.Logger;
 /**
  * @author liumian  2022/8/10 20:32
  */
-public abstract class AbstractTracingPlugin implements TracingPlugin {
+public abstract class AbstractTracingInterceptor implements TracingInterceptor {
 
-    protected static final Logger logger = Logger.getLogger(AbstractTracingPlugin.class.getName());
+    protected static final Logger logger = Logger.getLogger(AbstractTracingInterceptor.class.getName());
 
     protected static final Tracing tracing = TracingUtil.getTracing();
 
