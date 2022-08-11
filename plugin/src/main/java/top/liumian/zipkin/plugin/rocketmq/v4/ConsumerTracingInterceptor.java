@@ -4,7 +4,7 @@ import brave.Span;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.common.message.MessageExt;
-import top.liumian.zipkin.agent.plugin.interceptor.enhance.AbstractTracingInterceptor;
+import top.liumian.zipkin.agent.interceptor.enhance.plugin.AbstractTracingInterceptor;
 import top.liumian.zipkin.core.tracing.TracingUtil;
 
 import java.lang.reflect.Method;

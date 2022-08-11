@@ -1,10 +1,10 @@
-package top.liumian.zipkin.agent.plugin.interceptor.enhance.bytebuddy;
+package top.liumian.zipkin.agent.interceptor.enhance.bytebuddy;
 
 import brave.Span;
 import brave.Tracer;
 import brave.Tracing;
 import net.bytebuddy.implementation.bind.annotation.*;
-import top.liumian.zipkin.agent.plugin.interceptor.enhance.TracingInterceptor;
+import top.liumian.zipkin.agent.interceptor.enhance.plugin.TracingInterceptor;
 import top.liumian.zipkin.core.tracing.TracingUtil;
 
 import java.lang.reflect.Method;
@@ -17,15 +17,15 @@ import java.util.logging.Logger;
  *
  * @author liumian  2022/8/10 20:28
  */
-public class MethodTracingInterceptor {
+public class MethodTracingInterceptorTemplate {
 
-    private final static Logger logger = Logger.getLogger(MethodTracingInterceptor.class.getName());
+    private final static Logger logger = Logger.getLogger(MethodTracingInterceptorTemplate.class.getName());
 
     private final TracingInterceptor tracingInterceptor;
 
     protected final Tracing tracing;
 
-    public MethodTracingInterceptor(TracingInterceptor tracingInterceptor) {
+    public MethodTracingInterceptorTemplate(TracingInterceptor tracingInterceptor) {
         this.tracingInterceptor = tracingInterceptor;
         tracing = TracingUtil.getTracing();
     }

@@ -1,4 +1,4 @@
-package top.liumian.zipkin.agent.plugin.interceptor.enhance;
+package top.liumian.zipkin.agent.interceptor.enhance.plugin;
 
 import brave.Span;
 import brave.Tracing;
