@@ -33,7 +33,7 @@ public class MethodTracingInterceptorTemplate {
     @RuntimeType
     public Object intercept(@This Object obj, @AllArguments Object[] allArguments, @SuperCall Callable<?> callable,
                             @Origin Method method) throws Throwable {
-
+        System.err.println("执行方法：" + method.getName());
         Span span = null;
         try {
             span = tracingInterceptor.beforeMethod(method, allArguments, method.getParameterTypes());

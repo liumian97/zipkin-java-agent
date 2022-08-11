@@ -8,7 +8,6 @@ import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
-import top.liumian.zipkin.agent.interceptor.enhance.bytebuddy.LogInterceptor;
 import top.liumian.zipkin.agent.interceptor.enhance.bytebuddy.MethodTracingInterceptorTemplate;
 
 import java.lang.instrument.Instrumentation;
@@ -26,7 +25,7 @@ public class ZipkinAgent {
             public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule javaModule) {
                 // method对所有方法进行拦截
                 // intercept添加拦截器
-                return builder.method(ElementMatchers.<MethodDescription>any())
+                return builder.method(ElementMatchers.<MethodDescription>nameStartsWith("execute"))
                         .intercept(MethodDelegation.to(MethodTracingInterceptorTemplate.class));
             }
         };
@@ -39,7 +38,6 @@ public class ZipkinAgent {
 
     private static ElementMatcher<? super TypeDescription> getTypeMatcher() {
         return ElementMatchers.<TypeDescription>nameStartsWith("top.liumian.zipkin.plugin");
-//                .and(ElementMatchers.is(TracingInterceptor.class));
     }
 
 
@@ -75,6 +73,7 @@ public class ZipkinAgent {
                             final boolean loaded,
                             final Throwable throwable) {
             System.out.println("Enhance class " + typeName + " error:" + throwable.getMessage());
+            throwable.printStackTrace();
         }
 
         @Override
