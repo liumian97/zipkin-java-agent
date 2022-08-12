@@ -38,7 +38,7 @@ public class ZipkinAgent {
     }
 
     private static ElementMatcher<? super TypeDescription> getTypeMatcher() {
-        return ElementMatchers.<TypeDescription>nameStartsWith("top.liumian.zipkin.plugin");
+        return ElementMatchers.<TypeDescription>nameStartsWith("top.liumian.zipkin.plugin.jdk.executor");
     }
 
 
