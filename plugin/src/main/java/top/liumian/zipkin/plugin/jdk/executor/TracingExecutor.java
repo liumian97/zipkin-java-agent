@@ -8,6 +8,7 @@ import java.util.concurrent.Executor;
 public class TracingExecutor implements Executor {
     @Override
     public void execute(Runnable command) {
+        System.out.println("execute");
         command.run();
     }
 }

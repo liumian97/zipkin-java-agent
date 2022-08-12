@@ -14,12 +14,17 @@ public class TracingExecutorTest {
 
     public static void main(String[] args) {
 
-        Executor executor = new TracingExecutor();
+        TracingExecutor executor = new TracingExecutor();
         executor.execute(() -> {
             System.out.printf("%s - %s%n", Thread.currentThread().getName(),
                     TracingUtil.getTracing().tracer().currentSpan().context().traceIdString());
         });
 
+        try {
+            Thread.sleep(3000L);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
