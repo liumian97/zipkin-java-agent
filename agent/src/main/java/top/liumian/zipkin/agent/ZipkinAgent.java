@@ -1,17 +1,24 @@
 package top.liumian.zipkin.agent;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
-import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
-import top.liumian.zipkin.agent.interceptor.enhance.bytebuddy.ExecutorTracingInterceptor;
-import top.liumian.zipkin.agent.interceptor.enhance.bytebuddy.MethodTracingInterceptorTemplate;
+import top.liumian.zipkin.agent.interceptor.enhance.bytebuddy.matcher.AbstractJunction;
+import top.liumian.zipkin.agent.interceptor.enhance.plugin.AbstractClassEnhancePluginDefine;
+import top.liumian.zipkin.agent.interceptor.enhance.plugin.PluginEnhance;
+import top.liumian.zipkin.agent.interceptor.enhance.plugin.PluginLoader;
+import top.liumian.zipkin.agent.interceptor.enhance.plugin.PluginResourcesResolver;
 
 import java.lang.instrument.Instrumentation;
+import java.net.URL;
+import java.security.ProtectionDomain;
+
+import static net.bytebuddy.matcher.ElementMatchers.*;
+import static net.bytebuddy.matcher.ElementMatchers.isInterface;
 
 /**
  * @author liumian  2022/8/10 00:24
@@ -21,24 +28,38 @@ public class ZipkinAgent {
     public static void premain(String agentArgs, Instrumentation instrumentation) {
         System.err.println("premain start... ");
         System.err.println("args: " + agentArgs);
-        AgentBuilder.Transformer transformer = new AgentBuilder.Transformer() {
-            @Override
-            public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule javaModule) {
-                // method对所有方法进行拦截
-                // intercept添加拦截器
-                return builder.method(ElementMatchers.<MethodDescription>any())
-                        .intercept(MethodDelegation.to(new MethodTracingInterceptorTemplate(new ExecutorTracingInterceptor())));
-            }
-        };
+
+        PluginLoader.loadAllPlugin();
+
+        for (URL resource : PluginResourcesResolver.getResources()) {
+            System.out.println(resource.toString());
+        }
+
+
         new AgentBuilder.Default()
+                .ignore(nameStartsWith("net.bytebuddy.")
+                                .or(nameStartsWith("org.slf4j."))
+                                .or(nameStartsWith("org.groovy."))
+                                .or(nameContains("javassist"))
+                                .or(nameContains(".asm."))
+                                .or(nameContains(".reflectasm."))
+                                .or(nameStartsWith("sun.reflect"))
+                                .or(ElementMatchers.isSynthetic()))
+
                 .type(getTypeMatcher())
-                .transform(transformer)
+                .transform(new ZipkinTransform())
                 .with(new AgentListener())
                 .installOn(instrumentation);
     }
 
     private static ElementMatcher<? super TypeDescription> getTypeMatcher() {
-        return ElementMatchers.<TypeDescription>nameStartsWith("top.liumian.zipkin.plugin.jdk.executor");
+        ElementMatcher.Junction<NamedElement> judge = new AbstractJunction<NamedElement>() {
+            @Override
+            public boolean matches(NamedElement target) {
+                return enhancePluginMap.containsKey(target.getActualName());
+            }
+        };
+        return judge.and(not(isInterface()));
     }
 
 
@@ -79,6 +100,29 @@ public class ZipkinAgent {
 
         @Override
         public void onComplete(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded) {
+        }
+    }
+
+
+    private static class ZipkinTransform implements AgentBuilder.Transformer {
+
+
+        @Override
+        public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder,
+                                                TypeDescription typeDescription,
+                                                ClassLoader classLoader,
+                                                JavaModule module,
+                                                final ProtectionDomain protectionDomain) {
+            DynamicType.Builder<?> newBuilder = builder;
+            for (AbstractClassEnhancePluginDefine pluginDefine : PluginLoader.ENHANCE_PLUGIN_INSTANCE_LIST) {
+                PluginEnhance pluginEnhance = new PluginEnhance(pluginDefine);
+                DynamicType.Builder<?> tmpNewBuilder = pluginEnhance.enhance(typeDescription, newBuilder, classLoader);
+                if (tmpNewBuilder != null) {
+                    newBuilder = tmpNewBuilder;
+                }
+
+            }
+            return newBuilder;
         }
     }
 

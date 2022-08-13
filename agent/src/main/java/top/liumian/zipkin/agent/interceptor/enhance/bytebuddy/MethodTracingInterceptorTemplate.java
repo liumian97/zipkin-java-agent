@@ -5,6 +5,7 @@ import brave.Tracer;
 import brave.Tracing;
 import net.bytebuddy.implementation.bind.annotation.*;
 import top.liumian.zipkin.agent.interceptor.enhance.plugin.TracingInterceptor;
+import top.liumian.zipkin.agent.interceptor.enhance.plugin.TracingInterceptorInstanceLoader;
 import top.liumian.zipkin.core.tracing.TracingUtil;
 
 import java.lang.reflect.Method;
@@ -25,8 +26,12 @@ public class MethodTracingInterceptorTemplate {
 
     protected final Tracing tracing;
 
-    public MethodTracingInterceptorTemplate(TracingInterceptor tracingInterceptor) {
-        this.tracingInterceptor = tracingInterceptor;
+    public MethodTracingInterceptorTemplate(String interceptorClass, ClassLoader classLoader) {
+        try {
+            tracingInterceptor = TracingInterceptorInstanceLoader.load(interceptorClass, classLoader);
+        } catch (Exception e) {
+            throw new RuntimeException("load " + interceptorClass + " instance failed");
+        }
         tracing = TracingUtil.getTracing();
     }
 
