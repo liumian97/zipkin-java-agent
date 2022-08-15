@@ -26,6 +26,11 @@ public abstract class AbstractClassEnhancePluginDefine {
     public abstract String getEnhanceClass();
 
 
+    public boolean isBootstrapClassPlugin(){
+        return false;
+    }
+
+
     /**
      * Main entrance of enhancing the class.
      *

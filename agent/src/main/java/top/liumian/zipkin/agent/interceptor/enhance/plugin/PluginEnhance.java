@@ -27,12 +27,45 @@ public class PluginEnhance {
 
         for (InstanceMethodsInterceptPoint interceptPoint : pluginDefine.getInstanceMethodsInterceptPoints()) {
             ElementMatcher.Junction<MethodDescription> junction = not(isStatic()).and(interceptPoint.getMethodsMatcher());
-            newClassBuilder = newClassBuilder.method(junction)
-                    .intercept(MethodDelegation.withDefaultConfiguration()
-                            .to(new MethodTracingInterceptorTemplate(interceptPoint.getMethodsInterceptor(), classLoader)));
+            if (pluginDefine.isBootstrapClassPlugin()){
+                newClassBuilder = newClassBuilder.method(junction)
+                        .intercept(MethodDelegation.withDefaultConfiguration()
+                                .to(internalDelegate(interceptPoint.getMethodsInterceptor())));
+            } else {
+                newClassBuilder = newClassBuilder.method(junction)
+                        .intercept(MethodDelegation.withDefaultConfiguration()
+                                .to(new MethodTracingInterceptorTemplate(interceptPoint.getMethodsInterceptor(), classLoader)));
+            }
 
         }
         return newClassBuilder;
+    }
+
+
+
+
+    /**
+     * Get the delegate class name.
+     *
+     * @param methodsInterceptor of original interceptor in the plugin
+     * @return generated delegate class name
+     */
+    public static String internalDelegate(String methodsInterceptor) {
+        return methodsInterceptor + "_internal";
+    }
+
+    /**
+     * Load the delegate class from current class loader, mostly should be AppClassLoader.
+     *
+     * @param methodsInterceptor of original interceptor in the plugin
+     * @return generated delegate class
+     */
+    public static Class forInternalDelegateClass(String methodsInterceptor) {
+        try {
+            return Class.forName(internalDelegate(methodsInterceptor));
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
 }

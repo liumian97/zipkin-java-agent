@@ -31,10 +31,6 @@ public class ZipkinAgent {
 
         PluginLoader.loadAllPlugin();
 
-        for (URL resource : PluginResourcesResolver.getResources()) {
-            System.out.println(resource.toString());
-        }
-
 
         new AgentBuilder.Default()
                 .ignore(nameStartsWith("net.bytebuddy.")
