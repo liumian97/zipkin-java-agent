@@ -9,16 +9,14 @@ import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
 import top.liumian.zipkin.agent.interceptor.enhance.bytebuddy.matcher.AbstractJunction;
 import top.liumian.zipkin.agent.interceptor.enhance.plugin.AbstractClassEnhancePluginDefine;
-import top.liumian.zipkin.agent.interceptor.enhance.plugin.PluginEnhance;
+import top.liumian.zipkin.agent.interceptor.enhance.plugin.BootstrapPluginBoost;
+import top.liumian.zipkin.agent.interceptor.enhance.plugin.PluginEnhancer;
 import top.liumian.zipkin.agent.interceptor.enhance.plugin.PluginLoader;
-import top.liumian.zipkin.agent.interceptor.enhance.plugin.PluginResourcesResolver;
 
 import java.lang.instrument.Instrumentation;
-import java.net.URL;
 import java.security.ProtectionDomain;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
-import static net.bytebuddy.matcher.ElementMatchers.isInterface;
 
 /**
  * @author liumian  2022/8/10 00:24
@@ -32,17 +30,19 @@ public class ZipkinAgent {
         PluginLoader.loadAllPlugin();
 
 
-        new AgentBuilder.Default()
+        AgentBuilder agentBuilder = new AgentBuilder.Default()
                 .ignore(nameStartsWith("net.bytebuddy.")
-                                .or(nameStartsWith("org.slf4j."))
-                                .or(nameStartsWith("org.groovy."))
-                                .or(nameContains("javassist"))
-                                .or(nameContains(".asm."))
-                                .or(nameContains(".reflectasm."))
-                                .or(nameStartsWith("sun.reflect"))
-                                .or(ElementMatchers.isSynthetic()))
+                        .or(nameStartsWith("org.slf4j."))
+                        .or(nameStartsWith("org.groovy."))
+                        .or(nameContains("javassist"))
+                        .or(nameContains(".asm."))
+                        .or(nameContains(".reflectasm."))
+                        .or(nameStartsWith("sun.reflect"))
+                        .or(ElementMatchers.isSynthetic()));
 
-                .type(getTypeMatcher())
+        agentBuilder = BootstrapPluginBoost.inject(instrumentation, agentBuilder);
+
+        agentBuilder.type(getTypeMatcher())
                 .transform(new ZipkinTransform())
                 .with(new AgentListener())
                 .installOn(instrumentation);
@@ -111,7 +111,7 @@ public class ZipkinAgent {
                                                 final ProtectionDomain protectionDomain) {
             DynamicType.Builder<?> newBuilder = builder;
             for (AbstractClassEnhancePluginDefine pluginDefine : PluginLoader.ENHANCE_PLUGIN_INSTANCE_LIST) {
-                PluginEnhance pluginEnhance = new PluginEnhance(pluginDefine);
+                PluginEnhancer pluginEnhance = new PluginEnhancer(pluginDefine);
                 DynamicType.Builder<?> tmpNewBuilder = pluginEnhance.enhance(typeDescription, newBuilder, classLoader);
                 if (tmpNewBuilder != null) {
                     newBuilder = tmpNewBuilder;

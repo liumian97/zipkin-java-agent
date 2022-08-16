@@ -19,13 +19,13 @@ public class ExecutorPluginDefine extends AbstractClassEnhancePluginDefine {
     private final String TRACING_INTERCEPTOR = "top.liumian.zipkin.plugin.jdk.executor.ExecutorTracingInterceptor";
 
 //    private final String ENHANCE_CLASS = "java.util.concurrent.Executor";
-//    private final String ENHANCE_CLASS = "java.util.concurrent.ThreadPoolExecutor";
-    private final String ENHANCE_CLASS = "top.liumian.zipkin.plugin.jdk.executor.TracingExecutor";
+    private final String ENHANCE_CLASS = "java.util.concurrent.ThreadPoolExecutor";
+//    private final String ENHANCE_CLASS = "top.liumian.zipkin.plugin.jdk.executor.TracingExecutor";
 
 
     @Override
     public boolean isBootstrapClassPlugin() {
-        return false;
+        return true;
     }
 
     @Override
