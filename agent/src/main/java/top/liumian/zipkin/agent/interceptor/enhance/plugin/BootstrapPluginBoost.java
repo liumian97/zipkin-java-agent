@@ -30,7 +30,15 @@ public class BootstrapPluginBoost {
 
     private static final String[] HIGH_PRIORITY_CLASSES = {
             "top.liumian.zipkin.agent.interceptor.enhance.plugin.OverrideCallable",
+            "top.liumian.zipkin.agent.interceptor.enhance.plugin.TracingInterceptor",
+            "top.liumian.zipkin.core.tracing.TracingUtil",
+            "brave.Span",
+            "brave.Tracer",
+            "brave.Tracing",
+            "brave.propagation.TraceContext",
+            "brave.propagation.TraceContextOrSamplingFlags"
     };
+
 
     public static AgentBuilder inject(Instrumentation instrumentation,
                                       AgentBuilder agentBuilder) {
@@ -48,9 +56,9 @@ public class BootstrapPluginBoost {
         /**
          * Prepare to open edge of necessary classes.
          */
-//        for (String generatedClass : classesTypeMap.keySet()) {
-//            edgeClasses.add(generatedClass);
-//        }
+        for (String highPriorityClass : HIGH_PRIORITY_CLASSES) {
+            loadHighPriorityClass(classesTypeMap, highPriorityClass);
+        }
 
         /**
          * Inject the classes into bootstrap class loader by using Unsafe Strategy.
@@ -95,10 +103,10 @@ public class BootstrapPluginBoost {
             TypeDescription templateTypeDescription = typePool.describe(templateClassName).resolve();
 
             DynamicType.Unloaded interceptorType = new ByteBuddy()
-                    .redefine(templateTypeDescription, ClassFileLocator.ForClassLoader
-                            .of(PluginEnhancer.class.getClassLoader()))
+                    .redefine(templateTypeDescription,
+                            ClassFileLocator.ForClassLoader.of(PluginEnhancer.class.getClassLoader()))
                     .name(internalInterceptorName)
-                    .field(named("TARGET_INTERCEPTOR"))
+                    .field(named("tracingInterceptorClass"))
                     .value(methodsInterceptor)
                     .make();
 

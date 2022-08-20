@@ -6,7 +6,6 @@ import brave.Tracing;
 import net.bytebuddy.implementation.bind.annotation.*;
 import top.liumian.zipkin.agent.interceptor.enhance.plugin.OverrideCallable;
 import top.liumian.zipkin.agent.interceptor.enhance.plugin.TracingInterceptor;
-import top.liumian.zipkin.agent.interceptor.enhance.plugin.TracingInterceptorInstanceLoader;
 import top.liumian.zipkin.core.tracing.TracingUtil;
 
 import java.lang.reflect.Method;
@@ -22,23 +21,17 @@ public class MethodWithOverrideArgsTracingInterceptorTemplate {
 
     private final static Logger logger = Logger.getLogger(MethodWithOverrideArgsTracingInterceptorTemplate.class.getName());
 
-    private final TracingInterceptor tracingInterceptor;
+    private static String tracingInterceptorClass;
 
-    protected final Tracing tracing;
+    private static TracingInterceptor tracingInterceptor;
 
-    public MethodWithOverrideArgsTracingInterceptorTemplate(String interceptorClass, ClassLoader classLoader) {
-        try {
-            tracingInterceptor = TracingInterceptorInstanceLoader.load(interceptorClass, classLoader);
-        } catch (Exception e) {
-            throw new RuntimeException("load " + interceptorClass + " instance failed");
-        }
-        tracing = TracingUtil.getTracing();
-    }
+    protected static Tracing tracing;
 
     @RuntimeType
-    public Object intercept(@This Object obj, @AllArguments Object[] allArguments, @Morph OverrideCallable callable,
+    public static Object intercept(@This Object obj, @AllArguments Object[] allArguments, @Morph OverrideCallable callable,
                             @Origin Method method) throws Throwable {
         System.err.println("执行方法：" + method.getName());
+        prepera();
         Span span = null;
         try {
             span = tracingInterceptor.beforeMethod(method, allArguments, method.getParameterTypes());
@@ -61,8 +54,20 @@ public class MethodWithOverrideArgsTracingInterceptorTemplate {
                 span.finish();
             }
         }
-
-
     }
+
+    public static void prepera(){
+        if (tracingInterceptor == null){
+            try {
+                ClassLoader loader = Thread.currentThread().getContextClassLoader();
+
+                tracingInterceptor = (TracingInterceptor) Class.forName(tracingInterceptorClass,true,loader).newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException("load " + tracingInterceptorClass + " instance failed");
+            }
+            tracing = TracingUtil.getTracing();
+        }
+    }
+
 
 }
