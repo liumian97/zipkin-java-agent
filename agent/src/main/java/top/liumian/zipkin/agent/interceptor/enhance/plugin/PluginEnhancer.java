@@ -1,5 +1,6 @@
 package top.liumian.zipkin.agent.interceptor.enhance.plugin;
 
+import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
@@ -30,6 +31,10 @@ public class PluginEnhancer {
         for (InstanceMethodsInterceptPoint interceptPoint : pluginDefine.getInstanceMethodsInterceptPoints()) {
             ElementMatcher.Junction<MethodDescription> junction = not(isStatic()).and(interceptPoint.getMethodsMatcher());
             if (pluginDefine.isBootstrapClassPlugin()) {
+
+
+//                newClassBuilder = newClassBuilder.visit(Advice.to(MethodWithOverrideArgsTracingInterceptorTemplate.class).on(junction));
+
                 newClassBuilder = newClassBuilder.method(junction)
                         .intercept(MethodDelegation.withDefaultConfiguration()
                                 .withBinders(Morph.Binder.install(OverrideCallable.class))

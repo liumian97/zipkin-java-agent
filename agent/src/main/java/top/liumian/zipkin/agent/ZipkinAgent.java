@@ -109,6 +109,8 @@ public class ZipkinAgent {
                                                 ClassLoader classLoader,
                                                 JavaModule module,
                                                 final ProtectionDomain protectionDomain) {
+
+
             DynamicType.Builder<?> newBuilder = builder;
             for (AbstractClassEnhancePluginDefine pluginDefine : PluginLoader.ENHANCE_PLUGIN_INSTANCE_LIST) {
                 PluginEnhancer pluginEnhance = new PluginEnhancer(pluginDefine);

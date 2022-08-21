@@ -3,6 +3,7 @@ package top.liumian.zipkin.agent.interceptor.enhance.plugin;
 import brave.Span;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 
 /**
  * @author liumian  2022/8/10 20:33
@@ -20,6 +21,12 @@ public interface TracingInterceptor {
      * @throws Throwable 异常
      */
     Span beforeMethod(Method method, Object[] allArguments, Class<?>[] argumentsTypes) throws Throwable;
+
+
+    Object invokeMethod( Object[] allArguments, OverrideCallable callable,
+                        Method method) throws Throwable;
+
+
 
 
     /**

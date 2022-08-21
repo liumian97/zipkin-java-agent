@@ -29,7 +29,7 @@ public class TracingExecutorTest {
         };
         executorService.execute(runnable);
 
-        new TracingExecutor().execute(runnable);
+//        new TracingExecutor().execute(runnable);
 
         try {
             Thread.sleep(3000L);

@@ -30,18 +30,22 @@ public class BootstrapPluginBoost {
 
     private static final String[] HIGH_PRIORITY_CLASSES = {
             "top.liumian.zipkin.agent.interceptor.enhance.plugin.OverrideCallable",
-            "top.liumian.zipkin.agent.interceptor.enhance.plugin.TracingInterceptor",
-            "top.liumian.zipkin.core.tracing.TracingUtil",
-            "brave.Span",
-            "brave.Tracer",
-            "brave.Tracing",
-            "brave.propagation.TraceContext",
-            "brave.propagation.TraceContextOrSamplingFlags"
+            "top.liumian.zipkin.agent.interceptor.enhance.plugin.TracingInterceptor"
     };
 
 
-    public static AgentBuilder inject(Instrumentation instrumentation,
-                                      AgentBuilder agentBuilder) {
+    public static final String[] CLASSES = {
+            "net.bytebuddy.implementation.bind.annotation.RuntimeType",
+            "net.bytebuddy.implementation.bind.annotation.This",
+            "net.bytebuddy.implementation.bind.annotation.AllArguments",
+            "net.bytebuddy.implementation.bind.annotation.AllArguments$Assignment",
+            "net.bytebuddy.implementation.bind.annotation.SuperCall",
+            "net.bytebuddy.implementation.bind.annotation.Origin",
+            "net.bytebuddy.implementation.bind.annotation.Morph",
+    };
+
+
+    public static AgentBuilder inject(Instrumentation instrumentation, AgentBuilder agentBuilder) {
         Map<String, byte[]> classesTypeMap = new HashMap<>();
 
         if (!prepareJREPlugin(classesTypeMap)) {
@@ -56,7 +60,7 @@ public class BootstrapPluginBoost {
         /**
          * Prepare to open edge of necessary classes.
          */
-        for (String highPriorityClass : HIGH_PRIORITY_CLASSES) {
+        for (String highPriorityClass : CLASSES) {
             loadHighPriorityClass(classesTypeMap, highPriorityClass);
         }
 

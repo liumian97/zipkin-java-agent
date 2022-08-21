@@ -1,15 +1,13 @@
 package top.liumian.zipkin.agent.interceptor.enhance.bytebuddy;
 
-import brave.Span;
-import brave.Tracer;
-import brave.Tracing;
-import net.bytebuddy.implementation.bind.annotation.*;
+import net.bytebuddy.implementation.bind.annotation.AllArguments;
+import net.bytebuddy.implementation.bind.annotation.Morph;
+import net.bytebuddy.implementation.bind.annotation.Origin;
+import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import top.liumian.zipkin.agent.interceptor.enhance.plugin.OverrideCallable;
 import top.liumian.zipkin.agent.interceptor.enhance.plugin.TracingInterceptor;
-import top.liumian.zipkin.core.tracing.TracingUtil;
 
 import java.lang.reflect.Method;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -25,47 +23,38 @@ public class MethodWithOverrideArgsTracingInterceptorTemplate {
 
     private static TracingInterceptor tracingInterceptor;
 
-    protected static Tracing tracing;
 
     @RuntimeType
-    public static Object intercept(@This Object obj, @AllArguments Object[] allArguments, @Morph OverrideCallable callable,
-                            @Origin Method method) throws Throwable {
-        System.err.println("执行方法：" + method.getName());
+    public static Object intercept(@Morph OverrideCallable callable, @Origin Method method, @AllArguments Object[] allArguments) throws Throwable {
+        System.out.println("执行方法123：" + method.getName());
+        System.out.println("tracingInterceptorClass:" + tracingInterceptorClass);
         prepera();
-        Span span = null;
-        try {
-            span = tracingInterceptor.beforeMethod(method, allArguments, method.getParameterTypes());
-        } catch (Throwable throwable) {
-            logger.log(Level.SEVERE, "tracing before method error", throwable);
-        }
-
-        Object result = null;
-        try (Tracer.SpanInScope spanInScope = tracing.tracer().withSpanInScope(span)) {
-            result = callable.call(allArguments);
-            return result;
-        } catch (Throwable throwable) {
-            if (span != null) {
-                tracingInterceptor.handleMethodException(method, allArguments, method.getParameterTypes(), span, throwable);
-            }
-            throw throwable;
-        } finally {
-            if (span != null) {
-                tracingInterceptor.afterMethod(method, allArguments, method.getParameterTypes(), span, result);
-                span.finish();
-            }
-        }
+        return tracingInterceptor.invokeMethod(allArguments, callable, method);
     }
 
-    public static void prepera(){
-        if (tracingInterceptor == null){
-            try {
-                ClassLoader loader = Thread.currentThread().getContextClassLoader();
+//    @Advice.OnMethodEnter
+//    @RuntimeType
+//    public static void intercept(@Advice.Origin Method method, @Advice.AllArguments Object[] allArguments) throws Throwable {
+//        System.out.println("执行方法123：" + method.getName());
+//        System.out.println("tracingInterceptorClass:"+tracingInterceptorClass);
+//        prepera();
+//        return tracingInterceptor.invokeMethod(allArguments, callable, method);
+//    }
 
-                tracingInterceptor = (TracingInterceptor) Class.forName(tracingInterceptorClass,true,loader).newInstance();
+//    @Advice.OnMethodExit
+//    public static void exit(@Advice.Origin Method method, @Advice.AllArguments Object[] allArguments) throws Throwable {
+//        System.out.println("方法退出：" + method.getName());
+//    }
+
+    private static void prepera() {
+        if (tracingInterceptor == null) {
+            try {
+                System.out.println("加载tracingInterceptor：" + tracingInterceptorClass);
+                ClassLoader loader = Thread.currentThread().getContextClassLoader();
+                tracingInterceptor = (TracingInterceptor) Class.forName(tracingInterceptorClass, true, loader).newInstance();
             } catch (Exception e) {
                 throw new RuntimeException("load " + tracingInterceptorClass + " instance failed");
             }
-            tracing = TracingUtil.getTracing();
         }
     }
 
