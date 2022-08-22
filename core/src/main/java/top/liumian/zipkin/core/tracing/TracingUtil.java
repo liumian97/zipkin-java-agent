@@ -32,6 +32,24 @@ public class TracingUtil {
         return TRACING;
     }
 
+    public static String getTraceId(){
+        Tracer tracer = TRACING.tracer();
+        if (tracer.currentSpan() != null){
+            return tracer.currentSpan().context().traceIdString();
+        } else {
+            return null;
+        }
+    }
+
+    public static String getSpanId(){
+        Tracer tracer = TRACING.tracer();
+        if (tracer != null){
+            return tracer.currentSpan().context().spanIdString();
+        } else {
+            return null;
+        }
+    }
+
     /**
      * 开启一个新的链路，适用于需要返回业务逻辑执行结果的场景
      *

@@ -30,15 +30,9 @@ public class PluginEnhancer {
         for (InstanceMethodsInterceptPoint interceptPoint : pluginDefine.getInstanceMethodsInterceptPoints()) {
             ElementMatcher.Junction<MethodDescription> junction = not(isStatic()).and(interceptPoint.getMethodsMatcher());
             if (pluginDefine.isBootstrapClassPlugin()) {
-
-
-//                newClassBuilder = newClassBuilder.visit(Advice.to(MethodWithOverrideArgsTracingInterceptorTemplate.class).on(junction));
-
                 newClassBuilder = newClassBuilder.method(junction)
                         .intercept(MethodDelegation.withDefaultConfiguration()
-//                                .withBinders(Morph.Binder.install(OverrideCallable.class))
                                 .to(BootstrapPluginBoost.forInternalDelegateClass(interceptPoint.getMethodsInterceptor())));
-//                                .to(new MethodWithOverrideArgsTracingInterceptorTemplate(interceptPoint.getMethodsInterceptor(), classLoader)));
             } else {
                 newClassBuilder = newClassBuilder.method(junction)
                         .intercept(MethodDelegation.withDefaultConfiguration()
