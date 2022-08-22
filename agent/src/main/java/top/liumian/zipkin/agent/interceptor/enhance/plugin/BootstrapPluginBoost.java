@@ -24,9 +24,8 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 public class BootstrapPluginBoost {
 
 
-    private static String INSTANCE_METHOD_WITH_OVERRIDE_ARGS_DELEGATE_TEMPLATE = "top.liumian.zipkin.agent.interceptor.enhance.bytebuddy.MethodWithOverrideArgsTracingInterceptorTemplate";
+    private static String INSTANCE_METHOD_WITH_OVERRIDE_ARGS_DELEGATE_TEMPLATE = "top.liumian.zipkin.agent.interceptor.enhance.bytebuddy.BootstrapClassMethodTracingInterceptorTemplate";
 
-    private static String INSTANCE_METHOD_DELEGATE_TEMPLATE = "top.liumian.zipkin.agent.interceptor.enhance.bytebuddy.MethodTracingInterceptorTemplate";
 
     private static final String[] HIGH_PRIORITY_CLASSES = {
             "top.liumian.zipkin.agent.interceptor.enhance.plugin.OverrideCallable",

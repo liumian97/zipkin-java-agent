@@ -19,13 +19,34 @@ public abstract class AbstractTracingInterceptor implements TracingInterceptor {
 
     protected static final Tracing tracing = TracingUtil.getTracing();
 
-    @Override
-    public void afterMethod(Method method, Object[] allArguments, Class<?>[] argumentsTypes, Span span, Object result) throws Throwable {
+    /**
+     * 方法前置处理
+     *
+     * @param method         被拦截的方法
+     * @param allArguments   所有的调用参数
+     * @param argumentsTypes 参数所对应的类型
+     * @return 当前链路的span
+     * @throws Throwable 异常
+     */
+    protected abstract Span beforeMethod(Method method, Object[] allArguments, Class<?>[] argumentsTypes) throws Throwable;
+
+
+    /**
+     * 方法后置处理
+     *
+     * @param method         被拦截的方法
+     * @param allArguments   所有的调用参数
+     * @param argumentsTypes 参数所对应的类型
+     * @param span           当前链路的span
+     * @param result         被拦截方法的返回结果
+     * @throws Throwable 异常
+     */
+    protected void afterMethod(Method method, Object[] allArguments, Class<?>[] argumentsTypes, Span span, Object result) throws Throwable {
 
     }
 
     @Override
-    public Object invokeMethod(Object[] allArguments, OverrideCallable callable, Method method) throws Throwable {
+    public Object invokeMethod(Object[] allArguments, Callable<?> callable, Method method) throws Throwable {
         Span span = null;
         try {
             System.out.println("beforeMethod");
@@ -37,7 +58,7 @@ public abstract class AbstractTracingInterceptor implements TracingInterceptor {
         Object result = null;
         try (Tracer.SpanInScope spanInScope = tracing.tracer().withSpanInScope(span)) {
             System.out.println("call");
-            result = callable.call(allArguments);
+            result = callable.call();
             return result;
         } catch (Throwable throwable) {
             if (span != null) {
@@ -53,8 +74,17 @@ public abstract class AbstractTracingInterceptor implements TracingInterceptor {
         }
     }
 
-    @Override
-    public void handleMethodException(Method method, Object[] allArguments, Class<?>[] argumentsTypes, Span span, Throwable throwable) {
+
+    /**
+     * 处理原始方法抛出来的异常
+     *
+     * @param method         被拦截的方法
+     * @param allArguments   所有调用参数
+     * @param argumentsTypes 参数所对应的类型
+     * @param span           当前链路的span
+     * @param throwable      捕获到的异常
+     */
+    protected void handleMethodException(Method method, Object[] allArguments, Class<?>[] argumentsTypes, Span span, Throwable throwable) {
         span.error(throwable);
     }
 }

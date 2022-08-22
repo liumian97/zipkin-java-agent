@@ -2,37 +2,28 @@ package top.liumian.zipkin.agent.interceptor.enhance.bytebuddy;
 
 import net.bytebuddy.implementation.bind.annotation.*;
 import top.liumian.zipkin.agent.interceptor.enhance.plugin.TracingInterceptor;
-import top.liumian.zipkin.agent.interceptor.enhance.plugin.TracingInterceptorInstanceLoader;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 /**
- * 实例方法链路跟踪拦截器
+ * bootstrap类实例方法链路跟踪拦截器
  *
  * @author liumian  2022/8/10 20:28
  */
-public class MethodTracingInterceptorTemplate {
+public class BootstrapClassMethodTracingInterceptorTemplate {
 
-    private final static Logger logger = Logger.getLogger(MethodTracingInterceptorTemplate.class.getName());
+    private final static Logger logger = Logger.getLogger(BootstrapClassMethodTracingInterceptorTemplate.class.getName());
 
     private static String tracingInterceptorClass;
+
     private static TracingInterceptor tracingInterceptor;
 
 
-    public MethodTracingInterceptorTemplate(String interceptorClass, ClassLoader classLoader) {
-        try {
-            tracingInterceptor = TracingInterceptorInstanceLoader.load(interceptorClass, classLoader);
-        } catch (Exception e) {
-            throw new RuntimeException("load " + interceptorClass + " instance failed");
-        }
-    }
-
     @RuntimeType
-    public Object intercept(@This Object obj, @AllArguments Object[] allArguments, @SuperCall Callable<?> callable,
-                            @Origin Method method) throws Throwable {
-
+    public static Object intercept(@SuperCall Callable<?> callable, @Origin Method method, @AllArguments Object[] allArguments) throws Throwable {
+        System.out.println("执行方法：" + method.getName());
         prepare();
         return tracingInterceptor.invokeMethod(allArguments, callable, method);
     }
@@ -48,5 +39,6 @@ public class MethodTracingInterceptorTemplate {
             }
         }
     }
+
 
 }

@@ -1,7 +1,5 @@
 package top.liumian.zipkin.agent.interceptor.enhance.plugin;
 
-import brave.Span;
-
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
@@ -12,44 +10,15 @@ public interface TracingInterceptor {
 
 
     /**
-     * 方法前置处理
+     * 对目标方法进行链路跟踪
      *
-     * @param method         被拦截的方法
-     * @param allArguments   所有的调用参数
-     * @param argumentsTypes 参数所对应的类型
-     * @return 当前链路的span
+     * @param allArguments 被调用的所有参数
+     * @param callable     被调用方法实例，byte buddy帮助封装到了callable#call方法中
+     * @param method       被调用方法
+     * @return 调用结果
      * @throws Throwable 异常
      */
-    Span beforeMethod(Method method, Object[] allArguments, Class<?>[] argumentsTypes) throws Throwable;
-
-
-    Object invokeMethod( Object[] allArguments, OverrideCallable callable,
+    Object invokeMethod(Object[] allArguments, Callable<?> callable,
                         Method method) throws Throwable;
-
-
-
-
-    /**
-     * 方法后置处理
-     *
-     * @param method         被拦截的方法
-     * @param allArguments   所有的调用参数
-     * @param argumentsTypes 参数所对应的类型
-     * @param span           当前链路的span
-     * @param result         被拦截方法的返回结果
-     * @throws Throwable 异常
-     */
-    void afterMethod(Method method, Object[] allArguments, Class<?>[] argumentsTypes, Span span, Object result) throws Throwable;
-
-    /**
-     * 处理原始方法抛出来的异常
-     *
-     * @param method         被拦截的方法
-     * @param allArguments   所有调用参数
-     * @param argumentsTypes 参数所对应的类型
-     * @param span           当前链路的span
-     * @param throwable      捕获到的异常
-     */
-    void handleMethodException(Method method, Object[] allArguments, Class<?>[] argumentsTypes, Span span, Throwable throwable);
 
 }
