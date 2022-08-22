@@ -17,8 +17,8 @@ public class MethodTracingInterceptorTemplate {
 
     private final static Logger logger = Logger.getLogger(MethodTracingInterceptorTemplate.class.getName());
 
-    private static String tracingInterceptorClass;
-    private static TracingInterceptor tracingInterceptor;
+    private String tracingInterceptorClass;
+    private TracingInterceptor tracingInterceptor;
 
 
     public MethodTracingInterceptorTemplate(String interceptorClass, ClassLoader classLoader) {
@@ -37,7 +37,7 @@ public class MethodTracingInterceptorTemplate {
         return tracingInterceptor.invokeMethod(allArguments, callable, method);
     }
 
-    private static void prepare() {
+    private void prepare() {
         if (tracingInterceptor == null) {
             try {
                 System.out.println("加载tracingInterceptor：" + tracingInterceptorClass);

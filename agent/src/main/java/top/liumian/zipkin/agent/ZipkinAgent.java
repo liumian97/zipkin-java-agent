@@ -113,10 +113,12 @@ public class ZipkinAgent {
 
             DynamicType.Builder<?> newBuilder = builder;
             for (AbstractClassEnhancePluginDefine pluginDefine : PluginLoader.ENHANCE_PLUGIN_INSTANCE_LIST) {
-                PluginEnhancer pluginEnhance = new PluginEnhancer(pluginDefine);
-                DynamicType.Builder<?> tmpNewBuilder = pluginEnhance.enhance(typeDescription, newBuilder, classLoader);
-                if (tmpNewBuilder != null) {
-                    newBuilder = tmpNewBuilder;
+                if (pluginDefine.getEnhanceClass().equalsIgnoreCase(typeDescription.getTypeName())){
+                    PluginEnhancer pluginEnhance = new PluginEnhancer(pluginDefine);
+                    DynamicType.Builder<?> tmpNewBuilder = pluginEnhance.enhance(typeDescription, newBuilder, classLoader);
+                    if (tmpNewBuilder != null) {
+                        newBuilder = tmpNewBuilder;
+                    }
                 }
 
             }

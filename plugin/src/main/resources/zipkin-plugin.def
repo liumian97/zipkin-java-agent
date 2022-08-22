@@ -1,1 +1,3 @@
 exector=top.liumian.zipkin.plugin.jdk.executor.define.ExecutorPluginDefine
+rocketmq-v4-consumer=top.liumian.zipkin.plugin.rocketmq.v4.define.ConsumerPluginDefine
+rocketmq-v4-producer=top.liumian.zipkin.plugin.rocketmq.v4.define.ProducerPluginDefine

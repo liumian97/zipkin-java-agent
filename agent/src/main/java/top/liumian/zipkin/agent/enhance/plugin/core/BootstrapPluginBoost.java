@@ -30,7 +30,9 @@ public class BootstrapPluginBoost {
 
 
     private static final String[] HIGH_PRIORITY_CLASSES = {
-            "top.liumian.zipkin.agent.enhance.plugin.interceptor.TracingInterceptor"
+            "top.liumian.zipkin.agent.enhance.plugin.interceptor.TracingInterceptor",
+//            "top.liumian.zipkin.agent.enhance.bytebuddy.template.MethodTracingInterceptorTemplate",
+//            "top.liumian.zipkin.agent.enhance.plugin.interceptor.TracingInterceptorInstanceLoader"
     };
 
 

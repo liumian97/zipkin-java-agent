@@ -3,6 +3,7 @@ package top.liumian.zipkin.core.tracing;
 import brave.Span;
 import brave.Tracer;
 import brave.Tracing;
+import brave.propagation.ThreadLocalCurrentTraceContext;
 import brave.propagation.TraceContext;
 import brave.propagation.TraceContextOrSamplingFlags;
 
@@ -21,6 +22,11 @@ public class TracingUtil {
 
     private final static Tracing TRACING;
 
+    /**
+     * 1. 设置后端服务地址
+     * 2. 设置mdc
+     * 3. 设置servicename
+     */
     static {
         TRACING = Tracing.newBuilder().localServiceName("tracingTest")
                 .addSpanHandler(NOOP)
