@@ -7,11 +7,11 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
-import top.liumian.zipkin.agent.interceptor.enhance.bytebuddy.matcher.AbstractJunction;
-import top.liumian.zipkin.agent.interceptor.enhance.plugin.AbstractClassEnhancePluginDefine;
-import top.liumian.zipkin.agent.interceptor.enhance.plugin.BootstrapPluginBoost;
-import top.liumian.zipkin.agent.interceptor.enhance.plugin.PluginEnhancer;
-import top.liumian.zipkin.agent.interceptor.enhance.plugin.PluginLoader;
+import top.liumian.zipkin.agent.enhance.bytebuddy.matcher.AbstractJunction;
+import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassEnhancePluginDefine;
+import top.liumian.zipkin.agent.enhance.plugin.core.BootstrapPluginBoost;
+import top.liumian.zipkin.agent.enhance.plugin.core.PluginEnhancer;
+import top.liumian.zipkin.agent.enhance.plugin.core.PluginLoader;
 
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;

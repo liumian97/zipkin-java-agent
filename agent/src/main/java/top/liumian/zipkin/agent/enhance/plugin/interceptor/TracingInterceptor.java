@@ -1,4 +1,4 @@
-package top.liumian.zipkin.agent.interceptor.enhance.plugin;
+package top.liumian.zipkin.agent.enhance.plugin.interceptor;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;

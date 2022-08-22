@@ -1,4 +1,4 @@
-package top.liumian.zipkin.agent.interceptor.enhance.plugin;
+package top.liumian.zipkin.agent.enhance.plugin.core;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
@@ -7,6 +7,8 @@ import net.bytebuddy.dynamic.ClassFileLocator;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.pool.TypePool;
+import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassEnhancePluginDefine;
+import top.liumian.zipkin.agent.enhance.plugin.define.InstanceMethodsInterceptPoint;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,12 +26,11 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 public class BootstrapPluginBoost {
 
 
-    private static String INSTANCE_METHOD_WITH_OVERRIDE_ARGS_DELEGATE_TEMPLATE = "top.liumian.zipkin.agent.interceptor.enhance.bytebuddy.BootstrapClassMethodTracingInterceptorTemplate";
+    private static String INSTANCE_METHOD_WITH_OVERRIDE_ARGS_DELEGATE_TEMPLATE = "top.liumian.zipkin.agent.enhance.bytebuddy.template.BootstrapClassMethodTracingInterceptorTemplate";
 
 
     private static final String[] HIGH_PRIORITY_CLASSES = {
-            "top.liumian.zipkin.agent.interceptor.enhance.plugin.OverrideCallable",
-            "top.liumian.zipkin.agent.interceptor.enhance.plugin.TracingInterceptor"
+            "top.liumian.zipkin.agent.enhance.plugin.interceptor.TracingInterceptor"
     };
 
 

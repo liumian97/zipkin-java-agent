@@ -2,7 +2,7 @@ package top.liumian.zipkin.plugin.rocketmq.v4;
 
 import brave.Span;
 import org.apache.rocketmq.common.message.Message;
-import top.liumian.zipkin.agent.interceptor.enhance.plugin.AbstractTracingInterceptor;
+import top.liumian.zipkin.agent.enhance.plugin.interceptor.AbstractTracingInterceptor;
 import top.liumian.zipkin.core.tracing.TracingUtil;
 
 import java.lang.reflect.Method;

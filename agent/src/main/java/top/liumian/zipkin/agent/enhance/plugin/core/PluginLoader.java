@@ -1,4 +1,7 @@
-package top.liumian.zipkin.agent.interceptor.enhance.plugin;
+package top.liumian.zipkin.agent.enhance.plugin.core;
+
+import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassEnhancePluginDefine;
+import top.liumian.zipkin.agent.enhance.plugin.define.PluginDefine;
 
 import java.io.BufferedReader;
 import java.io.IOException;

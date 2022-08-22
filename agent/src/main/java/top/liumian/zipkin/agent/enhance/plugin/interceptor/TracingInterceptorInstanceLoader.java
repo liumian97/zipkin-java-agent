@@ -1,4 +1,4 @@
-package top.liumian.zipkin.agent.interceptor.enhance.plugin;
+package top.liumian.zipkin.agent.enhance.plugin.interceptor;
 
 import java.util.HashMap;
 import java.util.Map;

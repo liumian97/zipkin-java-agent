@@ -1,12 +1,13 @@
-package top.liumian.zipkin.agent.interceptor.enhance.plugin;
+package top.liumian.zipkin.agent.enhance.plugin.core;
 
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.implementation.bind.annotation.Morph;
 import net.bytebuddy.matcher.ElementMatcher;
-import top.liumian.zipkin.agent.interceptor.enhance.bytebuddy.MethodTracingInterceptorTemplate;
+import top.liumian.zipkin.agent.enhance.plugin.define.InstanceMethodsInterceptPoint;
+import top.liumian.zipkin.agent.enhance.bytebuddy.template.MethodTracingInterceptorTemplate;
+import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassEnhancePluginDefine;
 
 import static net.bytebuddy.matcher.ElementMatchers.isStatic;
 import static net.bytebuddy.matcher.ElementMatchers.not;

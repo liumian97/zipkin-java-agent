@@ -1,9 +1,4 @@
-package top.liumian.zipkin.agent.interceptor.enhance.plugin;
-
-import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.dynamic.DynamicType;
-
-import java.util.List;
+package top.liumian.zipkin.agent.enhance.plugin.define;
 
 /**
  * @author liumian  2022/8/11 08:47

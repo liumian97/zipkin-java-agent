@@ -1,7 +1,7 @@
-package top.liumian.zipkin.agent.interceptor.enhance.bytebuddy;
+package top.liumian.zipkin.agent.enhance.bytebuddy.template;
 
 import net.bytebuddy.implementation.bind.annotation.*;
-import top.liumian.zipkin.agent.interceptor.enhance.plugin.TracingInterceptor;
+import top.liumian.zipkin.agent.enhance.plugin.interceptor.TracingInterceptor;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;

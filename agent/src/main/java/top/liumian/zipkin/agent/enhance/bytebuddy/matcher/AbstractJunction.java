@@ -16,11 +16,11 @@
  *
  */
 
-package top.liumian.zipkin.agent.interceptor.enhance.bytebuddy.matcher;
+package top.liumian.zipkin.agent.enhance.bytebuddy.matcher;
 
 import net.bytebuddy.matcher.ElementMatcher;
-import top.liumian.zipkin.agent.interceptor.enhance.plugin.AbstractClassEnhancePluginDefine;
-import top.liumian.zipkin.agent.interceptor.enhance.plugin.PluginLoader;
+import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassEnhancePluginDefine;
+import top.liumian.zipkin.agent.enhance.plugin.core.PluginLoader;
 
 import java.util.HashMap;
 import java.util.Map;
