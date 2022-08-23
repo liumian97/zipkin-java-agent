@@ -59,14 +59,13 @@ public class TracingUtil {
     /**
      * 开启一个新的链路，适用于需要返回业务逻辑执行结果的场景
      *
-     * @param tracing    tracing
      * @param tranceName 链路名称
      * @param function   自定义业务逻辑
      * @param <R>        返回类型
      * @return 业务逻辑执行结果
      */
-    public static <R> R newTrace(Tracing tracing, String tranceName, Function<Span, R> function) {
-        Tracer tracer = tracing.tracer();
+    public static <R> R newTrace(String tranceName, Function<Span, R> function) {
+        Tracer tracer = TRACING.tracer();
         Span span = tracer.newTrace().name(tranceName).start();
         span.annotate(tranceName + ".start");
         try (Tracer.SpanInScope ws = tracer.withSpanInScope(span)) {
@@ -84,12 +83,11 @@ public class TracingUtil {
     /**
      * 开启一个新的链路，适用于不需要返回业务逻辑执行结果的场景
      *
-     * @param tracing    tracing
      * @param tranceName 链路名称
      * @param consumer   自定义业务逻辑
      */
-    public static void newTrace(Tracing tracing, String tranceName, Consumer<Span> consumer) {
-        Tracer tracer = tracing.tracer();
+    public static void newTrace(String tranceName, Consumer<Span> consumer) {
+        Tracer tracer = TRACING.tracer();
         Span span = tracer.newTrace().name(tranceName).start();
         span.annotate(tranceName + ".start");
         try (Tracer.SpanInScope ws = tracer.withSpanInScope(span)) {

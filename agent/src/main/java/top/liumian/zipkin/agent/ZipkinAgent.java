@@ -1,7 +1,6 @@
 package top.liumian.zipkin.agent;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
-import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -17,7 +16,7 @@ import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
-import static top.liumian.zipkin.agent.enhance.plugin.core.PluginLoader.ENHANCE_PLUGIN_INSTANCE_LIST;
+import static top.liumian.zipkin.agent.enhance.plugin.core.PluginLoader.PLUGIN_ENHANCE_DEFINE_LIST;
 
 /**
  * @author liumian  2022/8/10 00:24
@@ -50,18 +49,18 @@ public class ZipkinAgent {
     }
 
     private static ElementMatcher<? super TypeDescription> getTypeMatcher() {
-        ElementMatcher.Junction judge = new AbstractJunction<NamedElement>() {
+        ElementMatcher.Junction<TypeDescription> judge = new AbstractJunction<TypeDescription>() {
             @Override
-            public boolean matches(NamedElement target) {
-                return enhancePluginMap.containsKey(target.getActualName());
+            public boolean matches(TypeDescription target) {
+                for (PluginEnhanceDefine pluginEnhanceDefine : PLUGIN_ENHANCE_DEFINE_LIST) {
+                    if (pluginEnhanceDefine.isMatch(target)){
+                        return true;
+                    }
+                }
+                return false;
             }
         };
-        judge = judge.and(not(isInterface()));
-        for (int i = 0; i < ENHANCE_PLUGIN_INSTANCE_LIST.size(); i++) {
-            PluginEnhanceDefine pluginDefine = ENHANCE_PLUGIN_INSTANCE_LIST.get(i);
-            judge = judge.or(hasSuperType(named(pluginDefine.getEnhanceClass())).and(not(isInterface())));
-        }
-        return judge.and(not(isInterface()));
+        return judge;
     }
 
 
@@ -118,7 +117,7 @@ public class ZipkinAgent {
 
 
             DynamicType.Builder<?> newBuilder = builder;
-            for (PluginEnhanceDefine pluginEnhanceDefine : ENHANCE_PLUGIN_INSTANCE_LIST) {
+            for (PluginEnhanceDefine pluginEnhanceDefine : PLUGIN_ENHANCE_DEFINE_LIST) {
                 if (pluginEnhanceDefine.isMatch(typeDescription)){
                     PluginEnhancer pluginEnhance = new PluginEnhancer(pluginEnhanceDefine);
                     DynamicType.Builder<?> tmpNewBuilder = pluginEnhance.enhance(typeDescription, newBuilder, classLoader);

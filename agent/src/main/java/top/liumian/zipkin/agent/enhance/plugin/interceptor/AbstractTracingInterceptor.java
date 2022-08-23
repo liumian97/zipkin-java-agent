@@ -49,7 +49,6 @@ public abstract class AbstractTracingInterceptor implements TracingInterceptor {
     public Object invokeMethod(Object[] allArguments, Callable<?> callable, Method method) throws Throwable {
         Span span = null;
         try {
-            System.out.println("beforeMethod");
             span = this.beforeMethod(method, allArguments, method.getParameterTypes());
         } catch (Throwable throwable) {
             logger.log(Level.SEVERE, "tracing before method error", throwable);
@@ -57,7 +56,6 @@ public abstract class AbstractTracingInterceptor implements TracingInterceptor {
 
         Object result = null;
         try (Tracer.SpanInScope spanInScope = tracing.tracer().withSpanInScope(span)) {
-            System.out.println("call");
             result = callable.call();
             return result;
         } catch (Throwable throwable) {
@@ -66,7 +64,6 @@ public abstract class AbstractTracingInterceptor implements TracingInterceptor {
             }
             throw throwable;
         } finally {
-            System.out.println("afterMethod");
             if (span != null) {
                 this.afterMethod(method, allArguments, method.getParameterTypes(), span, result);
                 span.finish();

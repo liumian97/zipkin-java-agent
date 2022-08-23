@@ -32,7 +32,7 @@ public abstract class AbstractJunction<V> implements ElementMatcher.Junction<V> 
 
     public AbstractJunction() {
         enhancePluginMap = new HashMap<>();
-        PluginLoader.ENHANCE_PLUGIN_INSTANCE_LIST.forEach(enhancePluginDefine -> enhancePluginMap.put(enhancePluginDefine.getEnhanceClass(),enhancePluginDefine));
+        PluginLoader.PLUGIN_ENHANCE_DEFINE_LIST.forEach(enhancePluginDefine -> enhancePluginMap.put(enhancePluginDefine.getEnhanceClass(),enhancePluginDefine));
     }
 
     @Override

@@ -23,7 +23,7 @@ public class PluginLoader {
 
     public static final List<PluginDefine> PLUGIN_DEFINE_LIST = new ArrayList<>();
 
-    public static final List<PluginEnhanceDefine> ENHANCE_PLUGIN_INSTANCE_LIST = new ArrayList<>();
+    public static final List<PluginEnhanceDefine> PLUGIN_ENHANCE_DEFINE_LIST = new ArrayList<>();
 
     public static void loadAllPlugin() {
 
@@ -42,7 +42,7 @@ public class PluginLoader {
                         PLUGIN_DEFINE_LIST.add(pluginDefine);
 
                         PluginEnhanceDefine plugin = (PluginEnhanceDefine) Class.forName(pluginDefine.getDefineClass(), true, classLoader).newInstance();
-                        ENHANCE_PLUGIN_INSTANCE_LIST.add(plugin);
+                        PLUGIN_ENHANCE_DEFINE_LIST.add(plugin);
                     } catch (IllegalArgumentException e) {
                         logger.log(Level.SEVERE, "Failed to format plugin(" + line + ") define.");
                     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {

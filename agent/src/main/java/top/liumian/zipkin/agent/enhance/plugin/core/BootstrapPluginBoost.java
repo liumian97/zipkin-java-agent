@@ -80,7 +80,7 @@ public class BootstrapPluginBoost {
 
     private static boolean prepareJREPlugin(Map<String, byte[]> classesTypeMap) {
         TypePool typePool = TypePool.Default.of(BootstrapPluginBoost.class.getClassLoader());
-        List<PluginEnhanceDefine> enhancePluginInstanceList = PluginLoader.ENHANCE_PLUGIN_INSTANCE_LIST;
+        List<PluginEnhanceDefine> enhancePluginInstanceList = PluginLoader.PLUGIN_ENHANCE_DEFINE_LIST;
         enhancePluginInstanceList.stream()
                 .filter(PluginEnhanceDefine::isBootstrapClassPlugin)
                 .filter(pluginDefine -> pluginDefine.getInstanceMethodsInterceptPoints().length > 0)

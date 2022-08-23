@@ -1,11 +1,12 @@
 package top.liumian.zipkin.agent.enhance.plugin.define;
 
 import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.description.type.TypeList;
+import net.bytebuddy.matcher.ElementMatcher;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import static net.bytebuddy.matcher.ElementMatchers.hasSuperType;
+import static net.bytebuddy.matcher.ElementMatchers.named;
 
 /**
  * @author liumian  2022/8/11 08:47
@@ -35,7 +36,7 @@ public abstract class AbstractClassPluginEnhanceDefine implements PluginEnhanceD
     @Override
     public boolean isMatch(TypeDescription typeDescription) {
 
-        if (typeDescription.isInterface()){
+        if (typeDescription.isInterface()) {
             return false;
         }
 
@@ -43,19 +44,8 @@ public abstract class AbstractClassPluginEnhanceDefine implements PluginEnhanceD
             return true;
         }
 
-        List<String> parentTypes = new ArrayList<String>(Arrays.asList(getEnhanceClass()));
-
-        TypeList.Generic implInterfaces = typeDescription.getInterfaces();
-        for (TypeDescription.Generic implInterface : implInterfaces) {
-            matchHierarchyClass(implInterface, parentTypes);
-        }
-
-        if (typeDescription.getSuperClass() != null) {
-            matchHierarchyClass(typeDescription.getSuperClass(), parentTypes);
-        }
-
-        return parentTypes.size() == 0;
-
+        ElementMatcher.Junction<TypeDescription> elementMatcher = hasSuperType(named(this.getEnhanceClass()));
+        return elementMatcher.matches(typeDescription);
     }
 
     private void matchHierarchyClass(TypeDescription.Generic clazz, List<String> parentTypes) {
