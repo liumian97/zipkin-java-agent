@@ -7,8 +7,8 @@ import net.bytebuddy.dynamic.ClassFileLocator;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.pool.TypePool;
-import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassEnhancePluginDefine;
 import top.liumian.zipkin.agent.enhance.plugin.define.InstanceMethodsInterceptPoint;
+import top.liumian.zipkin.agent.enhance.plugin.define.PluginEnhanceDefine;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -80,9 +80,9 @@ public class BootstrapPluginBoost {
 
     private static boolean prepareJREPlugin(Map<String, byte[]> classesTypeMap) {
         TypePool typePool = TypePool.Default.of(BootstrapPluginBoost.class.getClassLoader());
-        List<AbstractClassEnhancePluginDefine> enhancePluginInstanceList = PluginLoader.ENHANCE_PLUGIN_INSTANCE_LIST;
+        List<PluginEnhanceDefine> enhancePluginInstanceList = PluginLoader.ENHANCE_PLUGIN_INSTANCE_LIST;
         enhancePluginInstanceList.stream()
-                .filter(AbstractClassEnhancePluginDefine::isBootstrapClassPlugin)
+                .filter(PluginEnhanceDefine::isBootstrapClassPlugin)
                 .filter(pluginDefine -> pluginDefine.getInstanceMethodsInterceptPoints().length > 0)
                 .forEach(pluginDefine -> {
                     for (InstanceMethodsInterceptPoint interceptPoint : pluginDefine.getInstanceMethodsInterceptPoints()) {

@@ -19,8 +19,8 @@
 package top.liumian.zipkin.agent.enhance.bytebuddy.matcher;
 
 import net.bytebuddy.matcher.ElementMatcher;
-import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassEnhancePluginDefine;
 import top.liumian.zipkin.agent.enhance.plugin.core.PluginLoader;
+import top.liumian.zipkin.agent.enhance.plugin.define.PluginEnhanceDefine;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +28,7 @@ import java.util.Map;
 public abstract class AbstractJunction<V> implements ElementMatcher.Junction<V> {
 
 
-    protected final Map<String, AbstractClassEnhancePluginDefine> enhancePluginMap;
+    protected final Map<String, PluginEnhanceDefine> enhancePluginMap;
 
     public AbstractJunction() {
         enhancePluginMap = new HashMap<>();

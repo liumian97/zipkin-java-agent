@@ -3,26 +3,21 @@ package top.liumian.zipkin.agent;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.description.type.TypeList;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
 import top.liumian.zipkin.agent.enhance.bytebuddy.matcher.AbstractJunction;
-import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassEnhancePluginDefine;
 import top.liumian.zipkin.agent.enhance.plugin.core.BootstrapPluginBoost;
 import top.liumian.zipkin.agent.enhance.plugin.core.PluginEnhancer;
 import top.liumian.zipkin.agent.enhance.plugin.core.PluginLoader;
+import top.liumian.zipkin.agent.enhance.plugin.define.PluginEnhanceDefine;
 
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static top.liumian.zipkin.agent.enhance.plugin.core.PluginLoader.ENHANCE_PLUGIN_INSTANCE_LIST;
-import static top.liumian.zipkin.agent.enhance.plugin.core.PluginLoader.PLUGIN_DEFINE_LIST;
 
 /**
  * @author liumian  2022/8/10 00:24
@@ -63,10 +58,10 @@ public class ZipkinAgent {
         };
         judge = judge.and(not(isInterface()));
         for (int i = 0; i < ENHANCE_PLUGIN_INSTANCE_LIST.size(); i++) {
-            AbstractClassEnhancePluginDefine pluginDefine = ENHANCE_PLUGIN_INSTANCE_LIST.get(i);
-            judge = judge.or(hasSuperType(named(pluginDefine.getEnhanceClass())));
+            PluginEnhanceDefine pluginDefine = ENHANCE_PLUGIN_INSTANCE_LIST.get(i);
+            judge = judge.or(hasSuperType(named(pluginDefine.getEnhanceClass())).and(not(isInterface())));
         }
-        return judge;
+        return judge.and(not(isInterface()));
     }
 
 
@@ -123,52 +118,20 @@ public class ZipkinAgent {
 
 
             DynamicType.Builder<?> newBuilder = builder;
-            for (AbstractClassEnhancePluginDefine pluginDefine : ENHANCE_PLUGIN_INSTANCE_LIST) {
-                if (pluginDefine.getEnhanceClass().equalsIgnoreCase(typeDescription.getTypeName()) || isMatch(typeDescription,pluginDefine.getEnhanceClass())){
-                    PluginEnhancer pluginEnhance = new PluginEnhancer(pluginDefine);
+            for (PluginEnhanceDefine pluginEnhanceDefine : ENHANCE_PLUGIN_INSTANCE_LIST) {
+                if (pluginEnhanceDefine.isMatch(typeDescription)){
+                    PluginEnhancer pluginEnhance = new PluginEnhancer(pluginEnhanceDefine);
                     DynamicType.Builder<?> tmpNewBuilder = pluginEnhance.enhance(typeDescription, newBuilder, classLoader);
                     if (tmpNewBuilder != null) {
                         newBuilder = tmpNewBuilder;
                     }
                 }
-
             }
             return newBuilder;
         }
     }
 
-    public static boolean isMatch(TypeDescription typeDescription,String enhansClass) {
-        List<String> parentTypes = new ArrayList<String>(Arrays.asList(enhansClass));
 
-        TypeList.Generic implInterfaces = typeDescription.getInterfaces();
-        for (TypeDescription.Generic implInterface : implInterfaces) {
-            matchHierarchyClass(implInterface, parentTypes);
-        }
-
-        if (typeDescription.getSuperClass() != null) {
-            matchHierarchyClass(typeDescription.getSuperClass(), parentTypes);
-        }
-
-        return parentTypes.size() == 0;
-
-    }
-
-    private static void matchHierarchyClass(TypeDescription.Generic clazz, List<String> parentTypes) {
-        parentTypes.remove(clazz.asRawType().getTypeName());
-        if (parentTypes.size() == 0) {
-            return;
-        }
-
-        for (TypeDescription.Generic generic : clazz.getInterfaces()) {
-            matchHierarchyClass(generic, parentTypes);
-        }
-
-        TypeDescription.Generic superClazz = clazz.getSuperClass();
-        if (superClazz != null && !clazz.getTypeName().equals("java.lang.Object")) {
-            matchHierarchyClass(superClazz, parentTypes);
-        }
-
-    }
 
 
 }

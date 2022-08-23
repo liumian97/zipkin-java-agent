@@ -1,16 +1,18 @@
 package top.liumian.zipkin.agent.enhance.plugin.define;
 
+import net.bytebuddy.description.type.TypeDescription;
+
 /**
- * @author liumian  2022/8/11 08:47
+ * @author liumian  2022/8/23 22:33
  */
-public abstract class AbstractClassEnhancePluginDefine {
+public interface PluginEnhanceDefine {
 
     /**
      * Instance methods intercept point. See {@link InstanceMethodsInterceptPoint}
      *
      * @return collections of {@link InstanceMethodsInterceptPoint}
      */
-    public abstract InstanceMethodsInterceptPoint[] getInstanceMethodsInterceptPoints();
+    InstanceMethodsInterceptPoint[] getInstanceMethodsInterceptPoints();
 
 
     /**
@@ -18,11 +20,11 @@ public abstract class AbstractClassEnhancePluginDefine {
      *
      * @return class path
      */
-    public abstract String getEnhanceClass();
+    String getEnhanceClass();
 
 
-    public boolean isBootstrapClassPlugin(){
-        return false;
-    }
+    boolean isBootstrapClassPlugin();
 
+
+    boolean isMatch(TypeDescription typeDescription);
 }

@@ -2,7 +2,7 @@ package top.liumian.zipkin.plugin.sdk.rocketmq.v4.define;
 
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
-import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassEnhancePluginDefine;
+import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassPluginEnhanceDefine;
 import top.liumian.zipkin.agent.enhance.plugin.define.InstanceMethodsInterceptPoint;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
@@ -11,7 +11,7 @@ import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
 /**
  * @author liumian  2022/8/11 09:18
  */
-public class ProducerPluginDefine extends AbstractClassEnhancePluginDefine {
+public class ProducerPluginEnhanceDefine extends AbstractClassPluginEnhanceDefine {
 
     private static final String ENHANCE_CLASS = "org.apache.rocketmq.client.impl.MQClientAPIImpl";
     private static final String SEND_MESSAGE_METHOD_NAME = "sendMessage";

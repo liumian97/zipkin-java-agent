@@ -2,7 +2,7 @@ package top.liumian.zipkin.plugin.sdk.rocketmq.v4.define;
 
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
-import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassEnhancePluginDefine;
+import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassPluginEnhanceDefine;
 import top.liumian.zipkin.agent.enhance.plugin.define.InstanceMethodsInterceptPoint;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
@@ -10,7 +10,7 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 /**
  * @author liumian  2022/8/11 09:31
  */
-public class ConsumerPluginDefine extends AbstractClassEnhancePluginDefine {
+public class ConsumerPluginEnhanceDefine extends AbstractClassPluginEnhanceDefine {
 
 
     private static final String ENHANCE_CLASS = "org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently";

@@ -1,7 +1,7 @@
 package top.liumian.zipkin.agent.enhance.plugin.core;
 
-import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassEnhancePluginDefine;
 import top.liumian.zipkin.agent.enhance.plugin.define.PluginDefine;
+import top.liumian.zipkin.agent.enhance.plugin.define.PluginEnhanceDefine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class PluginLoader {
 
     public static final List<PluginDefine> PLUGIN_DEFINE_LIST = new ArrayList<>();
 
-    public static final List<AbstractClassEnhancePluginDefine> ENHANCE_PLUGIN_INSTANCE_LIST = new ArrayList<>();
+    public static final List<PluginEnhanceDefine> ENHANCE_PLUGIN_INSTANCE_LIST = new ArrayList<>();
 
     public static void loadAllPlugin() {
 
@@ -41,7 +41,7 @@ public class PluginLoader {
                         PluginDefine pluginDefine = PluginDefine.build(line);
                         PLUGIN_DEFINE_LIST.add(pluginDefine);
 
-                        AbstractClassEnhancePluginDefine plugin = (AbstractClassEnhancePluginDefine) Class.forName(pluginDefine.getDefineClass(), true, classLoader).newInstance();
+                        PluginEnhanceDefine plugin = (PluginEnhanceDefine) Class.forName(pluginDefine.getDefineClass(), true, classLoader).newInstance();
                         ENHANCE_PLUGIN_INSTANCE_LIST.add(plugin);
                     } catch (IllegalArgumentException e) {
                         logger.log(Level.SEVERE, "Failed to format plugin(" + line + ") define.");

@@ -3,21 +3,21 @@ package top.liumian.zipkin.plugin.jdk.executor.define;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
-import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassEnhancePluginDefine;
+import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassPluginEnhanceDefine;
 import top.liumian.zipkin.agent.enhance.plugin.define.InstanceMethodsInterceptPoint;
 
 /**
  * @author liumian
  * @date 2022/8/12 1:51 PM
  **/
-public class ExecutorPluginDefine extends AbstractClassEnhancePluginDefine {
+public class ExecutorPluginEnhanceDefine extends AbstractClassPluginEnhanceDefine {
 
     private final String TRACING_METHOD = "execute";
 
     private final String TRACING_INTERCEPTOR = "top.liumian.zipkin.plugin.jdk.executor.ExecutorTracingInterceptor";
 
-//    private final String ENHANCE_CLASS = "java.util.concurrent.Executor";
-    private final String ENHANCE_CLASS = "java.util.concurrent.ThreadPoolExecutor";
+    private final String ENHANCE_CLASS = "java.util.concurrent.Executor";
+//    private final String ENHANCE_CLASS = "java.util.concurrent.ThreadPoolExecutor";
 //    private final String ENHANCE_CLASS = "top.liumian.zipkin.plugin.jdk.executor.TracingExecutor";
 
 

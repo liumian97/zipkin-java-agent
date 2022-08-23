@@ -7,7 +7,7 @@ import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatcher;
 import top.liumian.zipkin.agent.enhance.plugin.define.InstanceMethodsInterceptPoint;
 import top.liumian.zipkin.agent.enhance.bytebuddy.template.MethodTracingInterceptorTemplate;
-import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassEnhancePluginDefine;
+import top.liumian.zipkin.agent.enhance.plugin.define.PluginEnhanceDefine;
 
 import static net.bytebuddy.matcher.ElementMatchers.isStatic;
 import static net.bytebuddy.matcher.ElementMatchers.not;
@@ -18,18 +18,18 @@ import static net.bytebuddy.matcher.ElementMatchers.not;
  **/
 public class PluginEnhancer {
 
-    private final AbstractClassEnhancePluginDefine pluginDefine;
+    private final PluginEnhanceDefine pluginEnhanceDefine;
 
-    public PluginEnhancer(AbstractClassEnhancePluginDefine pluginDefine) {
-        this.pluginDefine = pluginDefine;
+    public PluginEnhancer(PluginEnhanceDefine pluginEnhanceDefine) {
+        this.pluginEnhanceDefine = pluginEnhanceDefine;
     }
 
     public DynamicType.Builder<?> enhance(TypeDescription typeDescription,
                                           DynamicType.Builder<?> newClassBuilder, ClassLoader classLoader) {
 
-        for (InstanceMethodsInterceptPoint interceptPoint : pluginDefine.getInstanceMethodsInterceptPoints()) {
+        for (InstanceMethodsInterceptPoint interceptPoint : pluginEnhanceDefine.getInstanceMethodsInterceptPoints()) {
             ElementMatcher.Junction<MethodDescription> junction = not(isStatic()).and(interceptPoint.getMethodsMatcher());
-            if (pluginDefine.isBootstrapClassPlugin()) {
+            if (pluginEnhanceDefine.isBootstrapClassPlugin()) {
                 newClassBuilder = newClassBuilder.method(junction)
                         .intercept(MethodDelegation.withDefaultConfiguration()
                                 .to(BootstrapPluginBoost.forInternalDelegateClass(interceptPoint.getMethodsInterceptor())));
