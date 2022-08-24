@@ -79,7 +79,7 @@ public class RocketMqV4Test {
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
                                                             ConsumeConcurrentlyContext context) {
                 System.out.printf("%s - Receive New Messages: %s %n", TracingUtil.getTraceId(), msgs.get(0).getMsgId());
-//                Assert.assertNotNull(TracingUtil.getTraceId());
+                Assert.assertNotNull(TracingUtil.getTraceId());
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
         };

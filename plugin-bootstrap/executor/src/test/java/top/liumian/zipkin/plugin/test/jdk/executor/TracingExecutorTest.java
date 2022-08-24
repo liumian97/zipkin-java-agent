@@ -7,6 +7,8 @@ import top.liumian.zipkin.core.tracing.TracingUtil;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -28,10 +30,30 @@ public class TracingExecutorTest {
             }
         };
 
+        TracingExecutor tracingExecutor = new TracingExecutor(1,1,1, TimeUnit.MINUTES,new LinkedBlockingQueue<>());
+
         TracingUtil.newTrace("startTrace", span -> {
             System.out.printf("startTrace: %s - %s %n",TracingUtil.getTraceId(),TracingUtil.getSpanId());
-            executorService.execute(runnable);
+            executorService.execute(() -> {
+                try {
+                    System.out.printf("executorService %s - %s - %s %n", Thread.currentThread().getName(), TracingUtil.getTraceId(),TracingUtil.getSpanId());
+                    Assert.assertNotNull(TracingUtil.getTraceId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            tracingExecutor.execute(() -> {
+                try {
+                    System.out.printf("tracingExecutor %s - %s - %s %n", Thread.currentThread().getName(), TracingUtil.getTraceId(),TracingUtil.getSpanId());
+                    Assert.assertNotNull(TracingUtil.getTraceId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
         });
+
 
 
 
