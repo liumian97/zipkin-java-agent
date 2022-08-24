@@ -1,2 +1,2 @@
-rocketmq-v4-consumer=top.liumian.zipkin.plugin.sdk.rocketmq.v4.define.ConsumerPluginEnhanceDefine
-rocketmq-v4-producer=top.liumian.zipkin.plugin.sdk.rocketmq.v4.define.ProducerPluginEnhanceDefine
+rocketmq-v4-ConsumerListenerConcurrentlyPluginEnhanceDefine=top.liumian.zipkin.plugin.sdk.rocketmq.v4.define.ConsumerListenerConcurrentlyPluginEnhanceDefine
+rocketmq-v4-ProducerPluginEnhanceDefine=top.liumian.zipkin.plugin.sdk.rocketmq.v4.define.ProducerPluginEnhanceDefine

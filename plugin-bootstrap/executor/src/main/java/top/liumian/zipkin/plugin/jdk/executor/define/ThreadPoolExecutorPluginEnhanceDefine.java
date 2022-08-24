@@ -10,11 +10,11 @@ import top.liumian.zipkin.agent.enhance.plugin.define.InstanceMethodsInterceptPo
  * @author liumian
  * @date 2022/8/12 1:51 PM
  **/
-public class ExecutorPluginEnhanceDefine extends AbstractClassPluginEnhanceDefine {
+public class ThreadPoolExecutorPluginEnhanceDefine extends AbstractClassPluginEnhanceDefine {
 
     private final String TRACING_METHOD = "execute";
 
-    private final String TRACING_INTERCEPTOR = "top.liumian.zipkin.plugin.jdk.executor.ExecutorTracingInterceptor";
+    private final String TRACING_INTERCEPTOR = "top.liumian.zipkin.plugin.jdk.executor.ThreadPoolExecutorTracingInterceptor";
 
     private final String ENHANCE_CLASS = "java.util.concurrent.ThreadPoolExecutor";
 

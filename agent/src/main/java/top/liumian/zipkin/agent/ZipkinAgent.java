@@ -6,8 +6,7 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
-import top.liumian.zipkin.agent.enhance.bytebuddy.matcher.AbstractJunction;
-import top.liumian.zipkin.agent.enhance.plugin.core.BootstrapPluginBoost;
+import top.liumian.zipkin.agent.enhance.plugin.core.BootstrapPluginBooster;
 import top.liumian.zipkin.agent.enhance.plugin.core.PluginEnhancer;
 import top.liumian.zipkin.agent.enhance.plugin.core.PluginLoader;
 import top.liumian.zipkin.agent.enhance.plugin.define.PluginEnhanceDefine;
@@ -15,7 +14,8 @@ import top.liumian.zipkin.agent.enhance.plugin.define.PluginEnhanceDefine;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
 
-import static net.bytebuddy.matcher.ElementMatchers.*;
+import static net.bytebuddy.matcher.ElementMatchers.nameContains;
+import static net.bytebuddy.matcher.ElementMatchers.nameStartsWith;
 import static top.liumian.zipkin.agent.enhance.plugin.core.PluginLoader.PLUGIN_ENHANCE_DEFINE_LIST;
 
 /**
@@ -40,7 +40,7 @@ public class ZipkinAgent {
                         .or(nameStartsWith("sun.reflect"))
                         .or(ElementMatchers.isSynthetic()));
 
-        agentBuilder = BootstrapPluginBoost.inject(instrumentation, agentBuilder);
+        agentBuilder = BootstrapPluginBooster.inject(instrumentation, agentBuilder);
 
         agentBuilder.type(getTypeMatcher())
                 .transform(new ZipkinTransform())
@@ -49,7 +49,7 @@ public class ZipkinAgent {
     }
 
     private static ElementMatcher<? super TypeDescription> getTypeMatcher() {
-        ElementMatcher.Junction<TypeDescription> judge = new AbstractJunction<TypeDescription>() {
+        return new ElementMatcher.Junction.AbstractBase<TypeDescription>() {
             @Override
             public boolean matches(TypeDescription target) {
                 for (PluginEnhanceDefine pluginEnhanceDefine : PLUGIN_ENHANCE_DEFINE_LIST) {
@@ -60,7 +60,6 @@ public class ZipkinAgent {
                 return false;
             }
         };
-        return judge;
     }
 
 

@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * tracing拦截器Loader
+ *
  * @author liumian
  * @date 2022/8/12 2:21 PM
  **/
@@ -13,8 +15,6 @@ public class TracingInterceptorInstanceLoader {
 
 
     private static ConcurrentHashMap<String, Object> INSTANCE_CACHE = new ConcurrentHashMap<String, Object>();
-    private static ReentrantLock INSTANCE_LOAD_LOCK = new ReentrantLock();
-    private static Map<ClassLoader, ClassLoader> EXTEND_PLUGIN_CLASSLOADERS = new HashMap<ClassLoader, ClassLoader>();
 
     /**
      * Load an instance of interceptor, and keep it singleton. Create {@link ClassLoader} for each
@@ -36,9 +36,7 @@ public class TracingInterceptorInstanceLoader {
         Object inst = INSTANCE_CACHE.get(instanceKey);
         if (inst == null) {
             inst = Class.forName(className, true, targetClassLoader).newInstance();
-            if (inst != null) {
-                INSTANCE_CACHE.put(instanceKey, inst);
-            }
+            INSTANCE_CACHE.put(instanceKey, inst);
         }
         return (T) inst;
     }

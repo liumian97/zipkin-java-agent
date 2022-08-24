@@ -9,27 +9,13 @@ import java.util.Set;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
 /**
+ * 抽象插件增强定义类
+ *
  * @author liumian  2022/8/11 08:47
  */
 public abstract class AbstractClassPluginEnhanceDefine implements PluginEnhanceDefine {
 
-    private Set<String> enhancedClassSet = new HashSet<>();
-
-    /**
-     * Instance methods intercept point. See {@link InstanceMethodsInterceptPoint}
-     *
-     * @return collections of {@link InstanceMethodsInterceptPoint}
-     */
-    public abstract InstanceMethodsInterceptPoint[] getInstanceMethodsInterceptPoints();
-
-
-    /**
-     * Define the class for filtering class.
-     *
-     * @return class path
-     */
-    public abstract String getEnhanceClass();
-
+    private final Set<String> enhancedClassSet = new HashSet<>();
 
     public boolean isBootstrapClassPlugin() {
         return false;

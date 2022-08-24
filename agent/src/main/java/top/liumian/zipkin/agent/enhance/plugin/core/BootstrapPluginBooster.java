@@ -21,22 +21,29 @@ import java.util.Map;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 
 /**
+ * bootstrap启动器
+ * 帮助加载所有需要被boostrap classloader加载的类进行加载
+ *
  * @author liumian  2022/8/16 23:37
  */
-public class BootstrapPluginBoost {
+public class BootstrapPluginBooster {
 
 
     private static String INSTANCE_METHOD_WITH_OVERRIDE_ARGS_DELEGATE_TEMPLATE = "top.liumian.zipkin.agent.enhance.bytebuddy.template.BootstrapClassMethodTracingInterceptorTemplate";
 
 
+    /**
+     * 高优先级的类
+     */
     private static final String[] HIGH_PRIORITY_CLASSES = {
             "top.liumian.zipkin.agent.enhance.plugin.interceptor.TracingInterceptor",
-//            "top.liumian.zipkin.agent.enhance.bytebuddy.template.MethodTracingInterceptorTemplate",
-//            "top.liumian.zipkin.agent.enhance.plugin.interceptor.TracingInterceptorInstanceLoader"
     };
 
 
-    public static final String[] CLASSES = {
+    /**
+     * byte-buddy核心类
+     */
+    public static final String[] BYTE_BUDDY_CORE_CLASSES = {
             "net.bytebuddy.implementation.bind.annotation.RuntimeType",
             "net.bytebuddy.implementation.bind.annotation.This",
             "net.bytebuddy.implementation.bind.annotation.AllArguments",
@@ -62,7 +69,7 @@ public class BootstrapPluginBoost {
         /**
          * Prepare to open edge of necessary classes.
          */
-        for (String highPriorityClass : CLASSES) {
+        for (String highPriorityClass : BYTE_BUDDY_CORE_CLASSES) {
             loadHighPriorityClass(classesTypeMap, highPriorityClass);
         }
 
@@ -78,8 +85,14 @@ public class BootstrapPluginBoost {
     }
 
 
+    /**
+     * 检测是否需要有被bootstrap加载interceptor
+     *
+     * @param classesTypeMap 需要被bootstrap加载的字节码
+     * @return
+     */
     private static boolean prepareJREPlugin(Map<String, byte[]> classesTypeMap) {
-        TypePool typePool = TypePool.Default.of(BootstrapPluginBoost.class.getClassLoader());
+        TypePool typePool = TypePool.Default.of(BootstrapPluginBooster.class.getClassLoader());
         List<PluginEnhanceDefine> enhancePluginInstanceList = PluginLoader.PLUGIN_ENHANCE_DEFINE_LIST;
         enhancePluginInstanceList.stream()
                 .filter(PluginEnhanceDefine::isBootstrapClassPlugin)
@@ -161,7 +174,7 @@ public class BootstrapPluginBoost {
         byte[] enhancedInstanceClassFile;
         try {
             String classResourceName = className.replaceAll("\\.", "/") + ".class";
-            InputStream resourceAsStream = BootstrapPluginBoost.class.getClassLoader().getResourceAsStream(classResourceName);
+            InputStream resourceAsStream = BootstrapPluginBooster.class.getClassLoader().getResourceAsStream(classResourceName);
 
             if (resourceAsStream == null) {
                 throw new RuntimeException("High priority class " + className + " not found.");

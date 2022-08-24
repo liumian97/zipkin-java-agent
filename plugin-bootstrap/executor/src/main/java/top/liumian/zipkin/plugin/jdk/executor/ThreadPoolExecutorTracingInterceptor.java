@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 /**
  * @author liumian  2022/8/11 23:22
  */
-public class ExecutorTracingInterceptor extends AbstractTracingInterceptor {
+public class ThreadPoolExecutorTracingInterceptor extends AbstractTracingInterceptor {
 
 
     @Override
@@ -17,9 +17,9 @@ public class ExecutorTracingInterceptor extends AbstractTracingInterceptor {
 
         String traceName = "SUMMIT RUNNABLE";
 
-        return TracingUtil.injectTraceInfo(AbstractTracingInterceptor.tracing, traceName, traceInfo -> {
-            TracingRunnable tracingRunnable = new TracingRunnable(AbstractTracingInterceptor.tracing, (Runnable) allArguments[0]);
-            allArguments[0] = AbstractTracingInterceptor.tracing.currentTraceContext().wrap(tracingRunnable);
+        return TracingUtil.injectTraceInfo(AbstractTracingInterceptor.TRACING, traceName, traceInfo -> {
+            TracingRunnable tracingRunnable = new TracingRunnable(AbstractTracingInterceptor.TRACING, (Runnable) allArguments[0]);
+            allArguments[0] = AbstractTracingInterceptor.TRACING.currentTraceContext().wrap(tracingRunnable);
         });
 
     }

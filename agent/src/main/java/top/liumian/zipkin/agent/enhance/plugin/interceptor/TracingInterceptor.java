@@ -4,6 +4,9 @@ import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
 /**
+ * tracing拦截器
+ * 为被拦截方法增加链路跟踪能力
+ *
  * @author liumian  2022/8/10 20:33
  */
 public interface TracingInterceptor {

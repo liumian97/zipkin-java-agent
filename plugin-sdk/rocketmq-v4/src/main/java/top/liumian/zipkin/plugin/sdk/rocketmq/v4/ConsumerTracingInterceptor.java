@@ -24,7 +24,7 @@ public class ConsumerTracingInterceptor extends AbstractTracingInterceptor {
             return null;
         } else {
             String traceName = "MQ/CONSUMER";
-            return TracingUtil.extractTraceInfo(tracing, traceName, () -> {
+            return TracingUtil.extractTraceInfo(TRACING, traceName, () -> {
                 MessageExt messageExt = msgs.get(0);
                 return messageExt.getProperties();
             });

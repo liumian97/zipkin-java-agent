@@ -17,7 +17,7 @@ public class ProducerTracingInterceptor extends AbstractTracingInterceptor {
 
         String traceName = "MQ/SEND";
         Message message = (Message) allArguments[2];
-        Span span = TracingUtil.injectTraceInfo(tracing, traceName, traceInfo -> traceInfo.forEach(message::putUserProperty));
+        Span span = TracingUtil.injectTraceInfo(TRACING, traceName, traceInfo -> traceInfo.forEach(message::putUserProperty));
         span.tag("mq.topic", message.getTopic());
         return span;
     }

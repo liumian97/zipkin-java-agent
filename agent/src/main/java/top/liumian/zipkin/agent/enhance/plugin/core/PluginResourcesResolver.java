@@ -27,7 +27,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Use the current classloader to read all plugin define file. The file must be named 'skywalking-plugin.def'
+ * Use the current classloader to read all plugin define file.
+ * The file must be named 'zipkin-plugin.def'
+ * @author liumian
  */
 public class PluginResourcesResolver {
 
@@ -39,13 +41,11 @@ public class PluginResourcesResolver {
         Enumeration<URL> urls;
         try {
             urls = PluginResourcesResolver.class.getClassLoader().getResources("zipkin-plugin.def");
-
             while (urls.hasMoreElements()) {
                 URL pluginUrl = urls.nextElement();
                 cfgUrlPaths.add(pluginUrl);
                 logger.log(Level.INFO, "find zipkin plugin define in "+ pluginUrl);
             }
-
             return cfgUrlPaths;
         } catch (IOException e) {
             logger.log(Level.WARNING, "read resources failure.", e);

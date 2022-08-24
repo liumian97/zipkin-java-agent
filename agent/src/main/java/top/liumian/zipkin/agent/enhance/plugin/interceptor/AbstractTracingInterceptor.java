@@ -17,7 +17,7 @@ public abstract class AbstractTracingInterceptor implements TracingInterceptor {
 
     protected static final Logger logger = Logger.getLogger(AbstractTracingInterceptor.class.getName());
 
-    protected static final Tracing tracing = TracingUtil.getTracing();
+    protected static final Tracing TRACING = TracingUtil.getTracing();
 
     /**
      * 方法前置处理
@@ -55,7 +55,7 @@ public abstract class AbstractTracingInterceptor implements TracingInterceptor {
         }
 
         Object result = null;
-        try (Tracer.SpanInScope spanInScope = tracing.tracer().withSpanInScope(span)) {
+        try (Tracer.SpanInScope spanInScope = TRACING.tracer().withSpanInScope(span)) {
             result = callable.call();
             return result;
         } catch (Throwable throwable) {

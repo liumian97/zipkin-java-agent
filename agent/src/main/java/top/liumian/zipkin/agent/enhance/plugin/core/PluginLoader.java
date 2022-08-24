@@ -21,10 +21,20 @@ public class PluginLoader {
 
     private static final Logger logger = Logger.getLogger(PluginLoader.class.getName());
 
+    /**
+     * 所有的plugin define
+     * 即在定义在zipkin-plugin.def中的plugin
+     */
     public static final List<PluginDefine> PLUGIN_DEFINE_LIST = new ArrayList<>();
 
+    /**
+     * 所有的plugin enhance define（插件增强定义）实例
+     */
     public static final List<PluginEnhanceDefine> PLUGIN_ENHANCE_DEFINE_LIST = new ArrayList<>();
 
+    /**
+     * 扫描加载所有的插件
+     */
     public static void loadAllPlugin() {
 
         ClassLoader classLoader = PluginLoader.class.getClassLoader();

@@ -1,1 +1,1 @@
-jdk-exector=top.liumian.zipkin.plugin.jdk.executor.define.ExecutorPluginEnhanceDefine
+jdk-ThreadPoolExecutorPluginEnhanceDefine=top.liumian.zipkin.plugin.jdk.executor.define.ThreadPoolExecutorPluginEnhanceDefine

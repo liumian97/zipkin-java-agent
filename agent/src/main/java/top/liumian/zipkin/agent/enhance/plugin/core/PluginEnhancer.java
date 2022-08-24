@@ -13,6 +13,8 @@ import static net.bytebuddy.matcher.ElementMatchers.isStatic;
 import static net.bytebuddy.matcher.ElementMatchers.not;
 
 /**
+ * 插件增强器
+ *
  * @author liumian
  * @date 2022/8/12 2:07 PM
  **/
@@ -24,6 +26,7 @@ public class PluginEnhancer {
         this.pluginEnhanceDefine = pluginEnhanceDefine;
     }
 
+
     public DynamicType.Builder<?> enhance(TypeDescription typeDescription,
                                           DynamicType.Builder<?> newClassBuilder, ClassLoader classLoader) {
 
@@ -32,7 +35,7 @@ public class PluginEnhancer {
             if (pluginEnhanceDefine.isBootstrapClassPlugin()) {
                 newClassBuilder = newClassBuilder.method(junction)
                         .intercept(MethodDelegation.withDefaultConfiguration()
-                                .to(BootstrapPluginBoost.forInternalDelegateClass(interceptPoint.getMethodsInterceptor())));
+                                .to(BootstrapPluginBooster.forInternalDelegateClass(interceptPoint.getMethodsInterceptor())));
             } else {
                 newClassBuilder = newClassBuilder.method(junction)
                         .intercept(MethodDelegation.withDefaultConfiguration()

@@ -10,7 +10,7 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 /**
  * @author liumian  2022/8/11 09:31
  */
-public class ConsumerPluginEnhanceDefine extends AbstractClassPluginEnhanceDefine {
+public class ConsumerListenerConcurrentlyPluginEnhanceDefine extends AbstractClassPluginEnhanceDefine {
 
 
     private static final String ENHANCE_CLASS = "org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently";
@@ -25,7 +25,6 @@ public class ConsumerPluginEnhanceDefine extends AbstractClassPluginEnhanceDefin
                     public ElementMatcher<MethodDescription> getMethodsMatcher() {
                         return named(CONSUMER_MESSAGE_METHOD);
                     }
-
                     @Override
                     public String getMethodsInterceptor() {
                         return INTERCEPTOR_CLASS;
