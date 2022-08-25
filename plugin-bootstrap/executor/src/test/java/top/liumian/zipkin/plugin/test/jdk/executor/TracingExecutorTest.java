@@ -5,10 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import top.liumian.zipkin.core.tracing.TracingUtil;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 
 /**
@@ -42,6 +39,27 @@ public class TracingExecutorTest {
                     e.printStackTrace();
                 }
             });
+
+            executorService.submit(() -> {
+                try {
+                    System.out.printf("executorService %s - %s - %s %n", Thread.currentThread().getName(), TracingUtil.getTraceId(),TracingUtil.getSpanId());
+                    Assert.assertNotNull(TracingUtil.getTraceId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            Future<String> submit = executorService.submit(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    return "hello world: " + TracingUtil.getTraceId();
+                }
+            });
+            try {
+                System.out.println(submit.get());
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
 
             tracingExecutor.execute(() -> {
                 try {

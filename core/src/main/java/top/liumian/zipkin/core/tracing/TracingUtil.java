@@ -106,19 +106,18 @@ public class TracingUtil {
     /**
      * 开启一条子链路，适用于需要返回业务逻辑执行结果的场景
      *
-     * @param tracing   tracing
      * @param traceName 链路名称
      * @param function  自定义业务逻辑
      * @param <R>       返回类型
      * @return 业务逻辑返回结果
      */
-    public static <R> R newChildTrace(Tracing tracing, String traceName, Function<Span, R> function) {
-        Tracer tracer = tracing.tracer();
+    public static <R> R newChildTrace(String traceName, Function<Span, R> function) throws Exception{
+        Tracer tracer = TRACING.tracer();
         Span span = tracer.nextSpan().name(traceName).start();
         span.annotate(traceName + ".start");
         try (Tracer.SpanInScope ws = tracer.withSpanInScope(span)) {
             return function.apply(span);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             span.error(e);
             throw e;
         } finally {
@@ -132,12 +131,11 @@ public class TracingUtil {
     /**
      * 开启一条子链路，适用于需要返回业务逻辑执行结果的场景
      *
-     * @param tracing   tracing
      * @param traceName 链路名称
      * @param consumer  自定义业务逻辑
      */
-    public static void newChildTrace(Tracing tracing, String traceName, Consumer<Span> consumer) {
-        Tracer tracer = tracing.tracer();
+    public static void newChildTrace(String traceName, Consumer<Span> consumer) {
+        Tracer tracer = TRACING.tracer();
         Span span = tracer.nextSpan().name(traceName).start();
         span.annotate(traceName + ".start");
         try (Tracer.SpanInScope ws = tracer.withSpanInScope(span)) {

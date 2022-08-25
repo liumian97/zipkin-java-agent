@@ -10,18 +10,15 @@ import top.liumian.zipkin.core.tracing.TracingUtil;
  */
 public class TracingRunnable implements Runnable {
 
-    private final Tracing tracing;
-
     private final Runnable runnable;
 
-    public TracingRunnable(Tracing tracing, Runnable runnable) {
-        this.tracing = tracing;
+    public TracingRunnable(Runnable runnable) {
         this.runnable = runnable;
     }
 
     @Override
     public void run() {
-        TracingUtil.newChildTrace(tracing, "execRunnable", span -> {
+        TracingUtil.newChildTrace("execRunnable", span -> {
             runnable.run();
         });
     }

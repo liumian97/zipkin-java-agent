@@ -5,6 +5,7 @@ import top.liumian.zipkin.agent.enhance.plugin.interceptor.AbstractTracingInterc
 import top.liumian.zipkin.core.tracing.TracingUtil;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 
 /**
  * @author liumian  2022/8/11 23:22
@@ -15,12 +16,20 @@ public class ThreadPoolExecutorTracingInterceptor extends AbstractTracingInterce
     @Override
     public Span beforeMethod(Method method, Object[] allArguments, Class<?>[] argumentsTypes) throws Throwable {
 
-        String traceName = "SUMMIT RUNNABLE";
+        String traceName = method.getName();
 
-        return TracingUtil.injectTraceInfo(AbstractTracingInterceptor.TRACING, traceName, traceInfo -> {
-            TracingRunnable tracingRunnable = new TracingRunnable(AbstractTracingInterceptor.TRACING, (Runnable) allArguments[0]);
-            allArguments[0] = AbstractTracingInterceptor.TRACING.currentTraceContext().wrap(tracingRunnable);
-        });
-
+        Object argument = allArguments[0];
+        if (argument instanceof Runnable){
+            return TracingUtil.injectTraceInfo(AbstractTracingInterceptor.TRACING, traceName, traceInfo -> {
+                allArguments[0] = AbstractTracingInterceptor.TRACING.currentTraceContext().wrap((Runnable) allArguments[0]);
+            });
+        } else if (argument instanceof Callable){
+            return TracingUtil.injectTraceInfo(AbstractTracingInterceptor.TRACING, traceName, traceInfo -> {
+                allArguments[0] = AbstractTracingInterceptor.TRACING.currentTraceContext().wrap((Callable<?>) allArguments[0]);
+            });
+        } else {
+            //do nothing
+            return null;
+        }
     }
 }
