@@ -1,4 +1,4 @@
-package top.liumian.zipkin.agent.enhance.plugin.define;
+package top.liumian.zipkin.agent.enhance.plugin.interceptor;
 
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;

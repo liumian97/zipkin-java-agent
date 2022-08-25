@@ -3,7 +3,7 @@ package top.liumian.zipkin.plugin.sdk.rocketmq.v4.define;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassPluginEnhanceDefine;
-import top.liumian.zipkin.agent.enhance.plugin.define.InstanceMethodsInterceptPoint;
+import top.liumian.zipkin.agent.enhance.plugin.interceptor.InstanceMethodsInterceptPoint;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
@@ -15,7 +15,7 @@ public class ProducerPluginEnhanceDefine extends AbstractClassPluginEnhanceDefin
 
     private static final String ENHANCE_CLASS = "org.apache.rocketmq.client.impl.MQClientAPIImpl";
     private static final String SEND_MESSAGE_METHOD_NAME = "sendMessage";
-    private static final String ASYNC_METHOD_INTERCEPTOR = "top.liumian.zipkin.plugin.sdk.rocketmq.v4.ProducerTracingInterceptor";
+    private static final String ASYNC_METHOD_INTERCEPTOR = "top.liumian.zipkin.plugin.sdk.rocketmq.v4.ProducerInterceptor";
 
     @Override
     public InstanceMethodsInterceptPoint[] getInstanceMethodsInterceptPoints() {

@@ -2,6 +2,8 @@ package top.liumian.zipkin.agent.enhance.plugin.define;
 
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
+import top.liumian.zipkin.agent.enhance.plugin.interceptor.ConstructorInterceptPoint;
+import top.liumian.zipkin.agent.enhance.plugin.interceptor.InstanceMethodsInterceptPoint;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +18,16 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 public abstract class AbstractClassPluginEnhanceDefine implements PluginEnhanceDefine {
 
     private final Set<String> enhancedClassSet = new HashSet<>();
+
+    @Override
+    public ConstructorInterceptPoint[] getConstructorInterceptorPoints() {
+        return new ConstructorInterceptPoint[0];
+    }
+
+    @Override
+    public InstanceMethodsInterceptPoint[] getInstanceMethodsInterceptPoints() {
+        return new InstanceMethodsInterceptPoint[0];
+    }
 
     public boolean isBootstrapClassPlugin() {
         return false;

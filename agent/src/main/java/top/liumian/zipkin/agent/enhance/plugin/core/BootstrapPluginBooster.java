@@ -7,7 +7,7 @@ import net.bytebuddy.dynamic.ClassFileLocator;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.pool.TypePool;
-import top.liumian.zipkin.agent.enhance.plugin.define.InstanceMethodsInterceptPoint;
+import top.liumian.zipkin.agent.enhance.plugin.interceptor.InstanceMethodsInterceptPoint;
 import top.liumian.zipkin.agent.enhance.plugin.define.PluginEnhanceDefine;
 
 import java.io.ByteArrayOutputStream;
@@ -29,7 +29,7 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 public class BootstrapPluginBooster {
 
 
-    private static String INSTANCE_METHOD_WITH_OVERRIDE_ARGS_DELEGATE_TEMPLATE = "top.liumian.zipkin.agent.enhance.bytebuddy.template.BootstrapClassMethodTracingInterceptorTemplate";
+    private static String INSTANCE_METHOD_WITH_OVERRIDE_ARGS_DELEGATE_TEMPLATE = "top.liumian.zipkin.agent.enhance.bytebuddy.template.BootstrapClassMethodInterceptorTemplate";
 
 
     /**
@@ -37,6 +37,7 @@ public class BootstrapPluginBooster {
      */
     private static final String[] HIGH_PRIORITY_CLASSES = {
             "top.liumian.zipkin.agent.enhance.plugin.interceptor.TracingInterceptor",
+            "top.liumian.zipkin.agent.enhance.plugin.core.EnhancedInstance",
     };
 
 

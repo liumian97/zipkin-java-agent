@@ -4,7 +4,7 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import top.liumian.zipkin.agent.enhance.plugin.define.AbstractClassPluginEnhanceDefine;
-import top.liumian.zipkin.agent.enhance.plugin.define.InstanceMethodsInterceptPoint;
+import top.liumian.zipkin.agent.enhance.plugin.interceptor.InstanceMethodsInterceptPoint;
 
 /**
  * @author liumian
@@ -14,7 +14,7 @@ public class ThreadPoolExecutorPluginEnhanceDefine extends AbstractClassPluginEn
 
     private final String TRACING_METHOD = "execute";
 
-    private final String TRACING_INTERCEPTOR = "top.liumian.zipkin.plugin.jdk.executor.ThreadPoolExecutorTracingInterceptor";
+    private final String TRACING_INTERCEPTOR = "top.liumian.zipkin.plugin.jdk.executor.ThreadPoolExecutorInterceptor";
 
     private final String ENHANCE_CLASS = "java.util.concurrent.ThreadPoolExecutor";
 

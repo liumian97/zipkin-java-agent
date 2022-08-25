@@ -1,6 +1,8 @@
 package top.liumian.zipkin.agent.enhance.plugin.define;
 
 import net.bytebuddy.description.type.TypeDescription;
+import top.liumian.zipkin.agent.enhance.plugin.interceptor.ConstructorInterceptPoint;
+import top.liumian.zipkin.agent.enhance.plugin.interceptor.InstanceMethodsInterceptPoint;
 
 /**
  * 插件增强定义类
@@ -8,6 +10,14 @@ import net.bytebuddy.description.type.TypeDescription;
  * @author liumian  2022/8/23 22:33
  */
 public interface PluginEnhanceDefine {
+
+    /**
+     * 获取所有的构造器拦截点
+     *
+     * @return 构造器拦截点列表
+     */
+    ConstructorInterceptPoint[] getConstructorInterceptorPoints();
+
 
     /**
      * 返回当前插件所有的实例方法拦截点
