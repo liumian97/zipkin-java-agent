@@ -30,6 +30,7 @@ public class TracingUtil {
     static {
         TRACING = Tracing.newBuilder().localServiceName("tracingTest")
                 .addSpanHandler(NOOP)
+                .traceId128Bit(true)
 //                .currentTraceContext(ThreadLocalCurrentTraceContext.newBuilder().addScopeDecorator(MDCScopeDecorator.get()).build())
                 .build();
     }

@@ -25,7 +25,7 @@ public class BootstrapClassMethodInterceptorTemplate {
     @RuntimeType
     public static Object intercept(@This EnhancedInstance enhancedInstance, @SuperCall Callable<?> callable,
                                    @Origin Method method, @AllArguments Object[] allArguments) throws Throwable {
-        System.out.println("执行方法：" + method.getName());
+        System.out.println("执行方法：" + method.getName() + " _ " + Thread.currentThread().getName());
         prepare();
         return tracingInterceptor.invokeMethod(enhancedInstance, allArguments, callable, method);
     }

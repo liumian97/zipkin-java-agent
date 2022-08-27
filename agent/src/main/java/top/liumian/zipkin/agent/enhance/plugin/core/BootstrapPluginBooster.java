@@ -7,6 +7,7 @@ import net.bytebuddy.dynamic.ClassFileLocator;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.pool.TypePool;
+import top.liumian.zipkin.agent.enhance.plugin.interceptor.ConstructorInterceptPoint;
 import top.liumian.zipkin.agent.enhance.plugin.interceptor.InstanceMethodsInterceptPoint;
 import top.liumian.zipkin.agent.enhance.plugin.define.PluginEnhanceDefine;
 
@@ -29,7 +30,8 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 public class BootstrapPluginBooster {
 
 
-    private static String INSTANCE_METHOD_WITH_OVERRIDE_ARGS_DELEGATE_TEMPLATE = "top.liumian.zipkin.agent.enhance.bytebuddy.template.BootstrapClassMethodInterceptorTemplate";
+    private static String BOOTSTRAP_CLASS_METHOD_INTERCEPTOR_DELEGATE_TEMPLATE = "top.liumian.zipkin.agent.enhance.bytebuddy.template.BootstrapClassMethodInterceptorTemplate";
+    private static String CONSTRUCTOR_INTERCEPTOR_DELEGATE_TEMPLATE = "top.liumian.zipkin.agent.enhance.bytebuddy.template.ConstructorInterceptorTemplate";
 
 
     /**
@@ -37,6 +39,7 @@ public class BootstrapPluginBooster {
      */
     private static final String[] HIGH_PRIORITY_CLASSES = {
             "top.liumian.zipkin.agent.enhance.plugin.interceptor.TracingInterceptor",
+            "top.liumian.zipkin.agent.enhance.plugin.interceptor.ConstructorTracingInterceptor",
             "top.liumian.zipkin.agent.enhance.plugin.core.EnhancedInstance",
     };
 
@@ -100,7 +103,11 @@ public class BootstrapPluginBooster {
                 .filter(pluginDefine -> pluginDefine.getInstanceMethodsInterceptPoints().length > 0)
                 .forEach(pluginDefine -> {
                     for (InstanceMethodsInterceptPoint interceptPoint : pluginDefine.getInstanceMethodsInterceptPoints()) {
-                        generateDelegator(classesTypeMap, typePool, INSTANCE_METHOD_WITH_OVERRIDE_ARGS_DELEGATE_TEMPLATE, interceptPoint.getMethodsInterceptor());
+                        generateDelegator(classesTypeMap, typePool, BOOTSTRAP_CLASS_METHOD_INTERCEPTOR_DELEGATE_TEMPLATE, interceptPoint.getMethodsInterceptor());
+                    }
+
+                    for (ConstructorInterceptPoint interceptPoint : pluginDefine.getConstructorInterceptorPoints()) {
+                        generateDelegator(classesTypeMap, typePool, CONSTRUCTOR_INTERCEPTOR_DELEGATE_TEMPLATE, interceptPoint.getConstructorInterceptor());
                     }
                 });
         return enhancePluginInstanceList.size() > 0;

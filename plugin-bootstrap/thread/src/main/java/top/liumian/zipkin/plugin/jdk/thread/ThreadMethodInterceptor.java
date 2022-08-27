@@ -1,6 +1,7 @@
 package top.liumian.zipkin.plugin.jdk.thread;
 
 import brave.Span;
+import brave.Tracer;
 import brave.propagation.TraceContext;
 import top.liumian.zipkin.agent.enhance.plugin.core.EnhancedInstance;
 import top.liumian.zipkin.agent.enhance.plugin.interceptor.AbstractInstanceTracingInterceptor;
@@ -18,10 +19,20 @@ public class ThreadMethodInterceptor extends AbstractInstanceTracingInterceptor 
 
         TraceContext invocationContext = (TraceContext) enhancedInstance.getZkDynamicField();
         if (invocationContext != null) {
+//            TracingUtil.getTracing().tracer().newChild(invocationContext);
+//            Span span = TracingUtil.getTracing().tracer().nextSpan();
+//            Span span = TracingUtil.getTracing().tracer().newChild(invocationContext);
             Span span = TracingUtil.getTracing().tracer().toSpan(invocationContext);
             return new TracingResult(true, span);
         } else {
-            return new TracingResult(false, null);
+            if (TracingUtil.getTracing().tracer() != null) {
+                //新起一个链路
+                Tracer tracer = TRACING.tracer();
+                Span span = tracer.newTrace().start();
+                return new TracingResult(true,span);
+            } else {
+                return new TracingResult(false, null);
+            }
         }
 
     }

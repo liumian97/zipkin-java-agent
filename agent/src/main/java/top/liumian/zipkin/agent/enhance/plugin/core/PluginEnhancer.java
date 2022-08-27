@@ -9,6 +9,7 @@ import net.bytebuddy.implementation.SuperMethodCall;
 import net.bytebuddy.matcher.ElementMatcher;
 import top.liumian.zipkin.agent.enhance.bytebuddy.template.ConstructorInterceptorTemplate;
 import top.liumian.zipkin.agent.enhance.bytebuddy.template.MethodInterceptorTemplate;
+import top.liumian.zipkin.agent.enhance.plugin.interceptor.ConstructorInterceptPoint;
 import top.liumian.zipkin.agent.enhance.plugin.interceptor.InstanceMethodsInterceptPoint;
 import top.liumian.zipkin.agent.enhance.plugin.define.PluginEnhanceDefine;
 
@@ -64,15 +65,15 @@ public class PluginEnhancer {
         // TODO: 2022/8/26 处理constructorInterceptor
 
         if (containsConstructorInterceptor){
-            for (InstanceMethodsInterceptPoint interceptPoint : pluginEnhanceDefine.getInstanceMethodsInterceptPoints()) {
+            for (ConstructorInterceptPoint interceptPoint : pluginEnhanceDefine.getConstructorInterceptorPoints()) {
                 if (pluginEnhanceDefine.isBootstrapClassPlugin()) {
-                    newClassBuilder = newClassBuilder.constructor(interceptPoint.getMethodsMatcher())
+                    newClassBuilder = newClassBuilder.constructor(interceptPoint.getConstructorMatcher())
                             .intercept(SuperMethodCall.INSTANCE.andThen(MethodDelegation.withDefaultConfiguration()
-                                    .to(BootstrapPluginBooster.forInternalDelegateClass(interceptPoint.getMethodsInterceptor()))));
+                                    .to(BootstrapPluginBooster.forInternalDelegateClass(interceptPoint.getConstructorInterceptor()))));
                 } else {
-                    newClassBuilder = newClassBuilder.constructor(interceptPoint.getMethodsMatcher())
+                    newClassBuilder = newClassBuilder.constructor(interceptPoint.getConstructorMatcher())
                             .intercept(SuperMethodCall.INSTANCE.andThen(MethodDelegation.withDefaultConfiguration()
-                                    .to(new ConstructorInterceptorTemplate(interceptPoint.getMethodsInterceptor(), classLoader))));
+                                    .to(new ConstructorInterceptorTemplate(interceptPoint.getConstructorInterceptor(), classLoader))));
                 }
             }
         }

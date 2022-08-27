@@ -23,9 +23,10 @@ public abstract class AbstractInstanceTracingInterceptor implements TracingInter
     /**
      * 方法前置处理
      *
-     * @param method         被拦截的方法
-     * @param allArguments   所有的调用参数
-     * @param argumentsTypes 参数所对应的类型
+     * @param enhancedInstance 被增强的目标类
+     * @param method           被拦截的方法
+     * @param allArguments     所有的调用参数
+     * @param argumentsTypes   参数所对应的类型
      * @return 链路跟踪结果
      * @throws Throwable 异常
      */
@@ -50,13 +51,13 @@ public abstract class AbstractInstanceTracingInterceptor implements TracingInter
     public Object invokeMethod(EnhancedInstance enhancedInstance, Object[] allArguments, Callable<?> callable, Method method) throws Throwable {
         TracingResult tracingResult;
         try {
-            tracingResult = this.beforeMethod(enhancedInstance,method, allArguments, method.getParameterTypes());
+            tracingResult = this.beforeMethod(enhancedInstance, method, allArguments, method.getParameterTypes());
         } catch (Throwable throwable) {
             logger.log(Level.SEVERE, "tracing before method error", throwable);
             tracingResult = new TracingResult(false, null);
         }
 
-        if (!tracingResult.isContinueTracing()){
+        if (!tracingResult.isContinueTracing()) {
             return callable.call();
         }
         Span span = tracingResult.getSpan();
@@ -65,10 +66,10 @@ public abstract class AbstractInstanceTracingInterceptor implements TracingInter
             result = callable.call();
             return result;
         } catch (Throwable throwable) {
-            this.handleMethodException(enhancedInstance,method, allArguments, method.getParameterTypes(), span, throwable);
+            this.handleMethodException(enhancedInstance, method, allArguments, method.getParameterTypes(), span, throwable);
             throw throwable;
         } finally {
-            this.afterMethod(enhancedInstance,method, allArguments, method.getParameterTypes(), span, result);
+            this.afterMethod(enhancedInstance, method, allArguments, method.getParameterTypes(), span, result);
             span.finish();
         }
     }
