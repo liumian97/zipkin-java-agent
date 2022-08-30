@@ -14,17 +14,26 @@ public class ThreadTest {
 
 
     @Test
-    public void test() {
+    public void test() throws Exception {
 
         System.out.println("hello world:" + Thread.currentThread().getName());
-//        Runnable runnable = () -> System.out.println("Hello World: " + TracingUtil.getTraceId() + " - " + TracingUtil.getSpanId());
-//        runnable.run();
+        Runnable runnable1 = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("runnable1: " + TracingUtil.getTraceId() + " - " + TracingUtil.getSpanId());
+            }
+        };
+        runnable1.run();
 
-        Runnable runnable = TracingUtil.newTrace("traceTest", span -> {
+        Runnable runnable = TracingUtil.newChildTrace("traceTest", span -> {
             System.out.println("new Trace: " + TracingUtil.getTraceId() + " - " + TracingUtil.getSpanId());
-            Runnable runnable1 = () -> System.out.println("Hello World222: " + TracingUtil.getTraceId() + " - " + TracingUtil.getSpanId());
-//            runnable1.run();
-            return runnable1;
+            Runnable runnable2 = new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("runnable2: " + TracingUtil.getTraceId() + " - " + TracingUtil.getSpanId());
+                }
+            };
+            return runnable2;
         });
         runnable.run();
 

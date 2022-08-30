@@ -18,7 +18,6 @@ public class MethodInterceptorTemplate {
 
     private final static Logger logger = Logger.getLogger(MethodInterceptorTemplate.class.getName());
 
-    private String tracingInterceptorClass;
     private TracingInterceptor tracingInterceptor;
 
 
@@ -34,20 +33,7 @@ public class MethodInterceptorTemplate {
     public Object intercept(@This EnhancedInstance enhancedInstance, @AllArguments Object[] allArguments,
                             @SuperCall Callable<?> callable, @Origin Method method) throws Throwable {
 
-        prepare();
         return tracingInterceptor.invokeMethod(enhancedInstance, allArguments, callable, method);
-    }
-
-    private void prepare() {
-        if (tracingInterceptor == null) {
-            try {
-                System.out.println("加载tracingInterceptor：" + tracingInterceptorClass);
-                ClassLoader loader = Thread.currentThread().getContextClassLoader();
-                tracingInterceptor = (TracingInterceptor) Class.forName(tracingInterceptorClass, true, loader).newInstance();
-            } catch (Exception e) {
-                throw new RuntimeException("load " + tracingInterceptorClass + " instance failed");
-            }
-        }
     }
 
 }

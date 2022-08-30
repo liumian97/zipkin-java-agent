@@ -19,16 +19,13 @@ public class ThreadMethodInterceptor extends AbstractInstanceTracingInterceptor 
 
         TraceContext invocationContext = (TraceContext) enhancedInstance.getZkDynamicField();
         if (invocationContext != null) {
-//            TracingUtil.getTracing().tracer().newChild(invocationContext);
-//            Span span = TracingUtil.getTracing().tracer().nextSpan();
-//            Span span = TracingUtil.getTracing().tracer().newChild(invocationContext);
-            Span span = TracingUtil.getTracing().tracer().toSpan(invocationContext);
+            Span span = TracingUtil.getTracing().tracer().newChild(invocationContext);
             return new TracingResult(true, span);
         } else {
             if (TracingUtil.getTracing().tracer() != null) {
                 //新起一个链路
                 Tracer tracer = TRACING.tracer();
-                Span span = tracer.newTrace().start();
+                Span span = tracer.newTrace().name("RUNNABLE.RUN").start();
                 return new TracingResult(true,span);
             } else {
                 return new TracingResult(false, null);

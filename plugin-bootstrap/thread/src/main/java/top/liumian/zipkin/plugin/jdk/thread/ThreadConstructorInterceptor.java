@@ -16,11 +16,16 @@ public class ThreadConstructorInterceptor implements ConstructorTracingIntercept
 
     @Override
     public void onConstruct(EnhancedInstance enhancedInstance, Object[] allArguments, Method method) throws Throwable {
-        Tracer tracer = TracingUtil.getTracing().tracer();
-        if (tracer != null){
-            //开启了链路跟踪
-            final TraceContext invocationContext = TracingUtil.getTracing().currentTraceContext().get();
-            enhancedInstance.setZkDynamicField(invocationContext);
+        try{
+            Tracer tracer = TracingUtil.getTracing().tracer();
+            if (tracer != null){
+                //开启了链路跟踪
+                System.out.println("ThreadConstructorInterceptor: " + TracingUtil.getTraceId() + " - " + TracingUtil.getSpanId());
+                final TraceContext invocationContext = TracingUtil.getTracing().currentTraceContext().get();
+                enhancedInstance.setZkDynamicField(invocationContext);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 

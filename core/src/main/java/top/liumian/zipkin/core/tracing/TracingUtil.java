@@ -50,7 +50,7 @@ public class TracingUtil {
 
     public static String getSpanId(){
         Tracer tracer = TRACING.tracer();
-        if (tracer != null){
+        if (tracer.currentSpan() != null){
             return tracer.currentSpan().context().spanIdString();
         } else {
             return null;
@@ -112,7 +112,7 @@ public class TracingUtil {
      * @param <R>       返回类型
      * @return 业务逻辑返回结果
      */
-    public static <R> R newChildTrace(String traceName, Function<Span, R> function) throws Exception{
+    public static <R> R newChildTrace(String traceName, Function<Span, R> function) {
         Tracer tracer = TRACING.tracer();
         Span span = tracer.nextSpan().name(traceName).start();
         span.annotate(traceName + ".start");
