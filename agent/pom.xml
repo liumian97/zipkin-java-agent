@@ -107,8 +107,8 @@
                                 <mkdir dir="${project.basedir}/../java-agent" />
                                 <copy file="${project.build.directory}/zipkin-java-agent.jar" tofile="${project.basedir}/../java-agent/zipkin-java-agent.jar" overwrite="true" />
                                 <mkdir dir="${project.basedir}/../java-agent/config" />
-                                <mkdir dir="${project.basedir}/../java-agent/logs" />
-<!--                                <copydir src="${project.basedir}/../config" dest="${project.basedir}/../java-agent/config" forceoverwrite="true" />-->
+<!--                                <mkdir dir="${project.basedir}/../java-agent/logs" />-->
+                                <copydir src="${project.build.directory}/classes/config" dest="${project.basedir}/../java-agent/config" forceoverwrite="true" />
                             </target>
                         </configuration>
                     </execution>
