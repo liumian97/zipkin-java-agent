@@ -79,6 +79,43 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <delete dir="${project.basedir}/../java-agent" />
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${project.basedir}/../java-agent" />
+                                <copy file="${project.build.directory}/zipkin-java-agent.jar" tofile="${project.basedir}/../java-agent/zipkin-java-agent.jar" overwrite="true" />
+                                <mkdir dir="${project.basedir}/../java-agent/config" />
+                                <mkdir dir="${project.basedir}/../java-agent/logs" />
+<!--                                <copydir src="${project.basedir}/../config" dest="${project.basedir}/../java-agent/config" forceoverwrite="true" />-->
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
         </plugins>
     </build>
 
