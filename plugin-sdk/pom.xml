@@ -12,7 +12,16 @@
     <artifactId>plugin-sdk</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>rocketmq-v4</module>
+        <module>rocketmq-v4.x</module>
+        <module>dubbo-v2.7.x</module>
+        <module>dubbo-v3.x</module>
+        <module>rocketmq-v5.x</module>
+        <module>httpclient-v3.x</module>
+        <module>httpclient-v4.x</module>
+        <module>httpclient-v5.x</module>
+        <module>okhttp-v2.x</module>
+        <module>okhttp-v3.x</module>
+        <module>okhttp-v4.x</module>
     </modules>
 
     <properties>
