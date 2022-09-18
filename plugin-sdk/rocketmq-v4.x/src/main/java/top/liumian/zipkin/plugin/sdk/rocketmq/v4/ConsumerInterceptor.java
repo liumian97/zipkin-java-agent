@@ -16,7 +16,7 @@ import java.util.logging.Level;
 /**
  * @author liumian  2022/8/10 21:27
  */
-public class ConsumerInterceptorInstance extends AbstractInstanceTracingInterceptor {
+public class ConsumerInterceptor extends AbstractInstanceTracingInterceptor {
 
     @Override
     public TracingResult beforeMethod(EnhancedInstance enhancedInstance, Method method, Object[] allArguments, Class<?>[] argumentsTypes) throws Throwable {

@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 /**
  * @author liumian  2022/8/10 21:07
  */
-public class ProducerInterceptorInstance extends AbstractInstanceTracingInterceptor {
+public class ProducerInterceptor extends AbstractInstanceTracingInterceptor {
 
     @Override
     public TracingResult beforeMethod(EnhancedInstance enhancedInstance, Method method, Object[] allArguments, Class<?>[] argumentsTypes) throws Throwable {
